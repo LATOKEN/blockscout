@@ -46,6 +46,10 @@ configmap:
 
 postgresql:
   enabled: true
+  image: "postgres"
+  imagePullSecrets: null
+  imageTag: "11.4"
+  postgresInitdbArgs: --data-checksums
   persistence:
     enabled: true
     accessMode: ReadWriteOnce
