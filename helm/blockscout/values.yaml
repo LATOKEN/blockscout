@@ -47,6 +47,18 @@ configmap:
     dev: "blockscout"
   POSTGRES_DB:
     dev: "blockscout"
+  MIX_ENV:
+    dev: "prod"
+  COIN:
+    dev: "LA"
+  ETHEREUM_JSONRPC_HTTP_URL:
+    dev: "http://116.203.75.72:7070"
+  ETHEREUM_JSONRPC_VARIANT:
+    dev: "ganache"
+  DATABASE_URL:
+    dev: "postgresql://blockscout:blockscout-dev-postgresql:5432/blockscout?ssl=false"
+  BLOCKSCOUT_HOST:
+    dev: "postgres"
 
 
 postgresql:
