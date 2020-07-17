@@ -19,7 +19,6 @@ services:
     restart: always
     depends_on:
       - postgres
-    command: ["./wait-for-it.sh", "localhost:5432", "--", "mix", "phx.server"]
     environment:
       - MIX_ENV=prod
       - COIN=LA
