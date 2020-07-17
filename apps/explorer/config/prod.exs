@@ -2,7 +2,7 @@ use Mix.Config
 
 database = if System.get_env("DATABASE_NAME"), do: nil, else: "blockscout"
 hostname = if System.get_env("DATABASE_HOST"), do: nil, else: "blockscout-dev-postgresql"
-database_url = if System.get_env("DATABASE_URL"), do: nil, else: "postgresql://postgres:blockscout-dev-postgresql:5432/blockscout?ssl=false"
+database_url = if System.get_env("DATABASE_URL"), do: nil, else: "postgresql://blockscout:blockscout-dev-postgresql:5432/blockscout?ssl=false"
 
 # Configures the database
 config :explorer, Explorer.Repo,
