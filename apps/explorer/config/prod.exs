@@ -1,10 +1,18 @@
 use Mix.Config
 
+database = if System.get_env("DATABASE_NAME"), do: nil, else: "blockscout"
+hostname = if System.get_env("DATABASE_HOST"), do: nil, else: "localhost"
+database_url = if System.get_env("DATABASE_URL"), do: nil, else: "postgresql://postgres:@$(HOST):5432/blockscout?ssl=false"
+
 # Configures the database
 config :explorer, Explorer.Repo,
-  url: System.get_env("DATABASE_URL"),
+  url: database_url,
+  database: database,
+  password: 'blockscout',
+  username: 'blockscout',
+  hostname: hostname,
   pool_size: String.to_integer(System.get_env("POOL_SIZE", "50")),
-  ssl: String.equivalent?(System.get_env("ECTO_USE_SSL") || "true", "true"),
+#  ssl: String.equivalent?(System.get_env("ECTO_USE_SSL") || "true", "true"),
   prepare: :unnamed,
   timeout: :timer.seconds(60)
 

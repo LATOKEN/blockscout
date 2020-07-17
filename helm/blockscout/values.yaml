@@ -1,0 +1,60 @@
+ingress:
+  enabled: true
+  annotations:
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: 2048m
+    nginx.ingress.kubernetes.io/proxy-buffer-size: 64k
+  secretName: certificate-production
+  hosts:
+    dev: lachain-dev2.nekotal.tech
+  paths:
+    value: "/"
+  servicePort: 3001
+
+replicaCount: 1
+image:
+  repository: harbor.nekotal.tech/dev-middleware/blockscout
+  tag: dev
+  pullPolicy: IfNotPresent
+ports:
+  containerPort: 3000
+  containerPort2: 3001
+nodeSelector:
+  node.selector/app: lachain
+resources:
+  # limits:
+  #  cpu: 700m
+  #  memory: 1Gi
+  # requests:
+  #  cpu: 700m
+  #  memory: 1Gi
+
+service:
+  type: ClusterIP
+  port: 5432
+  targetPort: 5432
+  port2: 4000
+  targetPort2: 4000
+
+configmap:
+  POSTGRES_ADDRESS:
+    dev: "jdbc:postgresql://localhost:5432/blockscout"
+  POSTGRES_USER: blockscout
+  POSTGRES_PASSWORD: blockscout
+
+
+postgresql:
+  enabled: true
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
+    size: 8Gi
+    storageClass: local-path
+  postgresqlUsername: blockscout
+  postgresqlPassword: blockscout
+  postgresqlDatabase: blockscout
+  metrics:
+    enabled: false
+  nodeSelector:
+    node.selector/app: lachain

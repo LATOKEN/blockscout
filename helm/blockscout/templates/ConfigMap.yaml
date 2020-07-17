@@ -1,0 +1,12 @@
+# This is a simple example of using a config map to create a single page static site.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  {{ .Release.Name }}
+  labels:
+    app.kubernetes.io/name:  {{ .Release.Name }}
+    helm.sh/chart: {{ include "blockscout.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+data:
+  POSTGRES_ADDRESS: {{ pluck .Values.global.env .Values.configmap.POSTGRES_ADDRESS | first | default .Values.configmap.POSTGRES_ADDRESS.dev }}

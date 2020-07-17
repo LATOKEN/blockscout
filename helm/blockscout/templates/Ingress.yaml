@@ -1,0 +1,29 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}
+    helm.sh/chart: {{ include "blockscout.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  rules:
+    - host: {{ pluck .Values.global.env .Values.ingress.hosts | first | default .Values.ingress.hosts.dev }}
+      http:
+        paths:
+          - path: {{ .Values.ingress.paths.value }}
+            backend:
+              serviceName: {{ .Release.Name }}
+              servicePort: {{ .Values.ingress.servicePort }}
+  tls:
+  - hosts:
+    - {{ pluck .Values.global.env .Values.ingress.hosts | first | default .Values.ingress.hosts.dev }}
+    secretName: {{ .Values.ingress.secretName }}
+{{- end }}
+

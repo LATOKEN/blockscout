@@ -10,6 +10,7 @@ ENV PORT=4000 \
 
 # Cache elixir deps
 ADD mix.exs mix.lock ./
+ADD wait-for-it.sh ./
 ADD apps/block_scout_web/mix.exs ./apps/block_scout_web/
 ADD apps/explorer/mix.exs ./apps/explorer/
 ADD apps/ethereum_jsonrpc/mix.exs ./apps/ethereum_jsonrpc/
@@ -35,10 +36,10 @@ RUN cd apps/explorer/ && \
     npm install && \
     apk update && apk del --force-broken-world alpine-sdk gmp-dev automake libtool inotify-tools autoconf python
 
-# RUN mix do ecto.drop --force, ecto.create, ecto.migrate
+RUN mix do ecto.drop --force, ecto.create, ecto.migrate
 
 RUN mix phx.digest
 
 # USER default
 
-# CMD ["mix", "phx.server"]
+#CMD ["mix", "phx.server"]
