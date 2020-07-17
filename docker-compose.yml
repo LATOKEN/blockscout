@@ -24,4 +24,5 @@ services:
       - COIN=LA
       - ETHEREUM_JSONRPC_HTTP_URL=http://116.203.75.72:7070
       - ETHEREUM_JSONRPC_VARIANT=ganache
+      - DATABASE_URL=postgresql://postgres:postgres:5432/blockscout?ssl=false
     network_mode: "host"

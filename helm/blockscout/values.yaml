@@ -10,7 +10,7 @@ ingress:
     dev: lachain-dev2.nekotal.tech
   paths:
     value: "/"
-  servicePort: 3001
+  servicePort: 4000
 
 replicaCount: 1
 image:
@@ -18,8 +18,8 @@ image:
   tag: dev
   pullPolicy: IfNotPresent
 ports:
-  containerPort: 3000
-  containerPort2: 3001
+  containerPort: 5432
+  containerPort2: 4000
 nodeSelector:
   node.selector/app: lachain
 resources:
