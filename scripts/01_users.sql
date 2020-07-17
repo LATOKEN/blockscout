@@ -1,0 +1,1 @@
+ALTER ROLE blockscout SUPERUSER;

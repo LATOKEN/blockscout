@@ -10,6 +10,7 @@ services:
       - POSTGRES_DB=blockscout
     volumes:
       - ./blockscout/postgresql:/var/lib/postgresql/data
+      - ./scripts/:/docker-entrypoint-initdb.d/
     network_mode: "host"
   app:
     build:
