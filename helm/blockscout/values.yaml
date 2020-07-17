@@ -41,8 +41,10 @@ service:
 configmap:
   POSTGRES_ADDRESS:
     dev: "jdbc:postgresql://blockscout-dev-postgresql:5432/blockscout"
-  POSTGRES_USER: blockscout
-  POSTGRES_PASSWORD: blockscout
+  POSTGRES_USER:
+    dev: "blockscout"
+  POSTGRES_PASSWORD:
+    dev: "blockscout"
 
 
 postgresql:
