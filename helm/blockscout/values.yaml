@@ -45,6 +45,8 @@ configmap:
     dev: "blockscout"
   POSTGRES_PASSWORD:
     dev: "blockscout"
+  POSTGRES_DB:
+    dev: "blockscout"
 
 
 postgresql:
