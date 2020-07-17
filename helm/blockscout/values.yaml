@@ -17,6 +17,7 @@ image:
   repository: harbor.nekotal.tech/dev-middleware/blockscout
   tag: dev
   pullPolicy: IfNotPresent
+  pullSecrets: null
 ports:
   containerPort: 5432
   containerPort2: 4000
@@ -47,6 +48,8 @@ configmap:
 postgresql:
   enabled: true
   image: "postgres"
+  updateStrategy: OnDelete
+  imagePullSecrets: null
   imageTag: "11.4"
   postgresInitdbArgs: --data-checksums
   persistence:
