@@ -48,7 +48,6 @@ configmap:
 postgresql:
   enabled: true
   image: "postgres"
-  updateStrategy: OnDelete
   imagePullSecrets: null
   imageTag: "11.4"
   postgresInitdbArgs: --data-checksums
