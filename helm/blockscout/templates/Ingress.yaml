@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-apiVersion: apps/v1
+apiVersion: {{ template "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ .Release.Name }}
