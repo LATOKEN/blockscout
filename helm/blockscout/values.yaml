@@ -78,4 +78,5 @@ postgresql:
   nodeSelector:
     node.selector/app: lachain
   pgHbaConfiguration: |-
-    host all all  trust
+    host all all all trust
+    local all all  trust
