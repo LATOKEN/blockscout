@@ -58,6 +58,8 @@ configmap:
     dev: "postgresql://blockscout:@blockscout-dev-postgresql:5432/blockscout?ssl=false"
   BLOCKSCOUT_HOST:
     dev: "postgres"
+  POSTGRESQL_POSTGRES_PASSWORD:
+    dev: "postgres"
 
 
 postgresql:
