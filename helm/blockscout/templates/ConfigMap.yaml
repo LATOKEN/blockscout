@@ -12,7 +12,6 @@ data:
   POSTGRES_ADDRESS: {{ pluck .Values.global.env .Values.configmap.POSTGRES_ADDRESS | first | default .Values.configmap.POSTGRES_ADDRESS.dev }}
   POSTGRES_USER: {{ pluck .Values.global.env .Values.configmap.POSTGRES_USER | first | default .Values.configmap.POSTGRES_USER.dev }}
   POSTGRES_PASSWORD: {{ pluck .Values.global.env .Values.configmap.POSTGRES_PASSWORD | first | default .Values.configmap.POSTGRES_PASSWORD.dev }}
-  POSTGRESQL_POSTGRES_PASSWORD: {{ pluck .Values.global.env .Values.configmap.POSTGRESQL_POSTGRES_PASSWORD | first | default .Values.configmap.POSTGRESQL_POSTGRES_PASSWORD.dev }}
   POSTGRES_DB: {{ pluck .Values.global.env .Values.configmap.POSTGRES_DB | first | default .Values.configmap.POSTGRES_DB.dev }}
   MIX_ENV: {{ pluck .Values.global.env .Values.configmap.MIX_ENV | first | default .Values.configmap.MIX_ENV.dev }}
   COIN: {{ pluck .Values.global.env .Values.configmap.COIN | first | default .Values.configmap.COIN.dev }}

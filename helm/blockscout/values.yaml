@@ -58,8 +58,6 @@ configmap:
     dev: "postgresql://blockscout:@blockscout-dev-postgresql:5432/blockscout?ssl=false"
   BLOCKSCOUT_HOST:
     dev: "postgres"
-  POSTGRESQL_POSTGRES_PASSWORD:
-    dev: "postgres"
 
 
 postgresql:
@@ -78,4 +76,4 @@ postgresql:
   nodeSelector:
     node.selector/app: lachain
   pgHbaConfiguration: |-
-    host all all all md5
+    host all all  trust
