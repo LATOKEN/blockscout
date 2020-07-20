@@ -56,6 +56,8 @@ configmap:
     dev: "ganache"
   DATABASE_URL:
     dev: "postgresql://blockscout:@blockscout-dev-postgresql:5432/blockscout?ssl=false"
+  DATABASE_HOST:
+    dev: "blockscout-dev-postgresql"
   BLOCKSCOUT_HOST:
     dev: "postgres"
 

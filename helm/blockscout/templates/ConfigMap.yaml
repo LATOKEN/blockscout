@@ -18,4 +18,5 @@ data:
   ETHEREUM_JSONRPC_HTTP_URL: {{ pluck .Values.global.env .Values.configmap.ETHEREUM_JSONRPC_HTTP_URL | first | default .Values.configmap.ETHEREUM_JSONRPC_HTTP_URL.dev }}
   ETHEREUM_JSONRPC_VARIANT: {{ pluck .Values.global.env .Values.configmap.ETHEREUM_JSONRPC_VARIANT | first | default .Values.configmap.ETHEREUM_JSONRPC_VARIANT.dev }}
   DATABASE_URL: {{ pluck .Values.global.env .Values.configmap.DATABASE_URL | first | default .Values.configmap.DATABASE_URL.dev }}
+  DATABASE_HOST: {{ pluck .Values.global.env .Values.configmap.DATABASE_HOST | first | default .Values.configmap.DATABASE_HOST.dev }}
   BLOCKSCOUT_HOST: {{ pluck .Values.global.env .Values.configmap.BLOCKSCOUT_HOST | first | default .Values.configmap.BLOCKSCOUT_HOST.dev }}
