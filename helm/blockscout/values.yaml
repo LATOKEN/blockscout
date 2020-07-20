@@ -9,7 +9,7 @@ ingress:
   hosts:
     dev: lachain-dev2.nekotal.tech
   paths:
-    value: "/blockscout"
+    value: "/"
   servicePort: 4000
 
 replicaCount: 1
