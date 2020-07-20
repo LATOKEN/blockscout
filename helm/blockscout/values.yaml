@@ -39,7 +39,7 @@ service:
 
 configmap:
   POSTGRES_ADDRESS:
-    dev: "jdbc:postgresql://blockscout-dev-postgresql:5432/blockscout"
+    dev: "jdbc:postgresql://blockscout:@blockscout-dev-postgresql:5432/blockscout"
   POSTGRES_USER:
     dev: "blockscout"
   POSTGRES_PASSWORD:
@@ -55,7 +55,7 @@ configmap:
   ETHEREUM_JSONRPC_VARIANT:
     dev: "ganache"
   DATABASE_URL:
-    dev: "postgresql://blockscout:blockscout-dev-postgresql:5432/blockscout?ssl=false"
+    dev: "postgresql://blockscout:@blockscout-dev-postgresql:5432/blockscout?ssl=false"
   BLOCKSCOUT_HOST:
     dev: "postgres"
 
@@ -75,3 +75,5 @@ postgresql:
     enabled: false
   nodeSelector:
     node.selector/app: lachain
+  pgHbaConfiguration: |-
+    host all all all md5
