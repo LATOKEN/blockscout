@@ -72,9 +72,9 @@ postgresql:
     accessMode: ReadWriteOnce
     size: 8Gi
     storageClass: local-path
-  postgresqlUsername: blockscout
-  postgresqlPassword: blockscout
-  postgresqlDatabase: blockscout
+  postgresUser: blockscout
+  postgresPassword: blockscout
+  postgresDatabase: blockscout
   metrics:
     enabled: false
   nodeSelector:
