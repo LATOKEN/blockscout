@@ -41,9 +41,6 @@ spec:
             - name: http
               containerPort: {{ .Values.ports.containerPort }}
               protocol: TCP
-            - name: http2
-              containerPort: {{ .Values.ports.containerPort2 }}
-              protocol: TCP
           {{- if .Values.resources }}
           resources:
           {{- toYaml .Values.resources | nindent 12 }}

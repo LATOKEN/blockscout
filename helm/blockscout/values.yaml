@@ -9,7 +9,7 @@ ingress:
   hosts:
     dev: lachain-dev2.nekotal.tech
   paths:
-    value: "/"
+    value: "/blockscout"
   servicePort: 4000
 
 replicaCount: 1
@@ -18,8 +18,7 @@ image:
   tag: dev
   pullPolicy: IfNotPresent
 ports:
-  containerPort: 5432
-  containerPort2: 4000
+  containerPort: 4000
 nodeSelector:
   node.selector/app: lachain
 resources:
@@ -32,10 +31,8 @@ resources:
 
 service:
   type: ClusterIP
-  port: 5432
-  targetPort: 5432
-  port2: 4000
-  targetPort2: 4000
+  port: 4000
+  targetPort: 4000
 
 configmap:
   POSTGRES_ADDRESS:
