@@ -7,7 +7,7 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-buffer-size: 64k
   secretName: certificate-production
   hosts:
-    dev: lachain-dev2.nekotal.tech
+    dev: lachain-dev3.nekotal.tech
   paths:
     value: "/"
   servicePort: 4000
