@@ -20,7 +20,7 @@ image:
 ports:
   containerPort: 4000
 nodeSelector:
-  node.selector/app: lachain
+  node.selector/app: middleware
 resources:
   # limits:
   #  cpu: 700m
@@ -73,7 +73,7 @@ postgresql:
   metrics:
     enabled: false
   nodeSelector:
-    node.selector/app: lachain
+    node.selector/app: middleware
   pgHbaConfiguration: |
     host all all all trust
     host all all 127.0.0.1/32 trust
