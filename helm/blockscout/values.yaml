@@ -61,7 +61,6 @@ configmap:
 
 postgresql:
   enabled: true
-  postgresInitdbArgs: --data-checksums
   persistence:
     enabled: true
     accessMode: ReadWriteOnce
@@ -73,6 +72,3 @@ postgresql:
     enabled: false
   nodeSelector:
     node.selector/app: middleware
-  pgHbaConfiguration: |
-    host all all all trust
-    host all all 127.0.0.1/32 trust
