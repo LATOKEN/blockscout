@@ -52,7 +52,7 @@ configmap:
   ETHEREUM_JSONRPC_VARIANT:
     dev: "ganache"
   DATABASE_URL:
-    dev: "postgresql://blockscout:@blockscout-dev-postgresql:5432/blockscout?ssl=false"
+    dev: "postgresql://blockscout:blockscout@blockscout-dev-postgresql:5432/blockscout?ssl=false"
   DATABASE_HOST:
     dev: "blockscout-dev-postgresql"
   BLOCKSCOUT_HOST:
@@ -68,6 +68,7 @@ postgresql:
   postgresqlUsername: blockscout
   postgresqlPassword: blockscout
   postgresqlDatabase: blockscout
+  postgresqlPostgresPassword: blockscout
   metrics:
     enabled: false
   nodeSelector:
