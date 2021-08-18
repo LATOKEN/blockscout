@@ -5,9 +5,7 @@ hostname = if System.get_env("DATABASE_URL"), do: nil, else: "localhost"
 
 # Configure your database
 config :explorer, Explorer.Repo,
-  database: 'explorer_dev',
-  password: 'password',
-  username: 'postgres',
+  database: database,
   hostname: hostname,
   url: System.get_env("DATABASE_URL"),
   pool_size: String.to_integer(System.get_env("POOL_SIZE", "50")),

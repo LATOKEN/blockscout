@@ -48,3 +48,4 @@ screenshots/
 helm/**/*.lock
 helm/**/charts
 helm/**/*.dec
+blockscout/**/*

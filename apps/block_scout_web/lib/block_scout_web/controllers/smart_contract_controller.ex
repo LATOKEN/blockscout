@@ -4,6 +4,8 @@ defmodule BlockScoutWeb.SmartContractController do
   alias Explorer.Chain
   alias Explorer.SmartContract.{Reader, Writer}
 
+  @burn_address "0x0000000000000000000000000000000000000000"
+
   def index(conn, %{"hash" => address_hash_string, "type" => contract_type, "action" => action}) do
     address_options = [
       necessity_by_association: %{
@@ -17,9 +19,9 @@ defmodule BlockScoutWeb.SmartContractController do
       implementation_address_hash_string =
         if contract_type == "proxy" do
           Chain.get_implementation_address_hash(address.hash, address.smart_contract.abi) ||
-            "0x0000000000000000000000000000000000000000"
+            @burn_address
         else
-          "0x0000000000000000000000000000000000000000"
+          @burn_address
         end
 
       functions =
@@ -58,7 +60,8 @@ defmodule BlockScoutWeb.SmartContractController do
         contract_abi: contract_abi,
         implementation_address: implementation_address_hash_string,
         implementation_abi: implementation_abi,
-        contract_type: contract_type
+        contract_type: contract_type,
+        action: action
       )
     else
       :error ->
@@ -88,13 +91,14 @@ defmodule BlockScoutWeb.SmartContractController do
     with true <- ajax?(conn),
          {:ok, address_hash} <- Chain.string_to_address_hash(params["id"]),
          {:ok, address} <- Chain.find_contract_address(address_hash, address_options, true) do
-      contract_type = if Chain.is_proxy_contract?(address.smart_contract.abi), do: :proxy, else: :regular
+      contract_type = if Chain.proxy_contract?(address.hash, address.smart_contract.abi), do: :proxy, else: :regular
 
-      outputs =
-        Reader.query_function(
+      %{output: outputs, names: names} =
+        Reader.query_function_with_names(
           address_hash,
-          %{name: params["function_name"], args: params["args"]},
-          contract_type
+          %{method_id: params["method_id"], args: params["args"]},
+          contract_type,
+          params["function_name"]
         )
 
       conn
@@ -103,7 +107,9 @@ defmodule BlockScoutWeb.SmartContractController do
       |> render(
         "_function_response.html",
         function_name: params["function_name"],
-        outputs: outputs
+        method_id: params["method_id"],
+        outputs: outputs,
+        names: names
       )
     else
       :error ->
