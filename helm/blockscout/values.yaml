@@ -1,13 +1,13 @@
 ingress:
   enabled: true
   annotations:
-    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/tls-acme: "true"
     kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/proxy-body-size: 2048m
+    nginx.ingress.kubernetes.io/proxy-body-size: 10m
     nginx.ingress.kubernetes.io/proxy-buffer-size: 64k
-  secretName: certificate-production
   hosts:
     dev: lachain-blockscout.dev3.nekotal.tech
+    qa: lachain-blockscout-qa.dev3.nekotal.tech
   paths:
     value: "/"
   servicePort: 4000
@@ -37,26 +37,37 @@ service:
 configmap:
   POSTGRES_ADDRESS:
     dev: "jdbc:postgresql://blockscout:@blockscout-dev-postgresql:5432/blockscout"
+    qa: "jdbc:postgresql://blockscout:@blockscout-qa-postgresql:5432/blockscout"
   POSTGRES_USER:
     dev: "blockscout"
+    qa: "blockscout"
   POSTGRES_PASSWORD:
     dev: "blockscout"
+    qa: "blockscout"
   POSTGRES_DB:
     dev: "blockscout"
+    qa: "blockscout"
   MIX_ENV:
     dev: "prod"
+    qa: "prod"
   COIN:
     dev: "LA"
+    qa: "LA"
   ETHEREUM_JSONRPC_HTTP_URL:
     dev: "http://116.203.75.72:7070"
+    qa: "http://116.203.75.72:7070"
   ETHEREUM_JSONRPC_VARIANT:
     dev: "ganache"
+    qa: "ganache"
   DATABASE_URL:
     dev: "postgresql://blockscout:blockscout@blockscout-dev-postgresql:5432/blockscout?ssl=false"
+    qa: "postgresql://blockscout:blockscout@blockscout-qa-postgresql:5432/blockscout?ssl=false"
   DATABASE_HOST:
     dev: "blockscout-dev-postgresql"
+    qa: "blockscout-qa-postgresql"
   BLOCKSCOUT_HOST:
     dev: "postgres"
+    qa: "postgres"
 
 
 postgresql:

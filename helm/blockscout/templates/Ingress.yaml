@@ -24,6 +24,6 @@ spec:
   tls:
   - hosts:
     - {{ pluck .Values.global.env .Values.ingress.hosts | first | default .Values.ingress.hosts.dev }}
-    secretName: {{ .Values.ingress.secretName }}
+    secretName: {{ .Release.Name }}
 {{- end }}
 
