@@ -9,7 +9,6 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 data:
-  {{- include "jvmdumps.configmap" .| nindent 2 -}}
   {{- $env := .Values.global.env }}
   GLOBAL_ENVIRONMENT: "{{ $env }}"
   {{- range $k, $v := .Values.configmap }}
@@ -18,6 +17,4 @@ data:
     {{- else }}
   {{ $k }}: "{{ $v | toString | replace "{env}" $env }}"
     {{- end }}
-  {{- end }}
-{{- end }}
 
