@@ -17,4 +17,5 @@ data:
     {{- else }}
   {{ $k }}: "{{ $v | toString | replace "{env}" $env }}"
     {{- end }}
+  {{- end }}
 
