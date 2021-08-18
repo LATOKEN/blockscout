@@ -4,6 +4,8 @@ services:
     container_name: postgres
     image: postgres:10.10
     restart: always
+    ports:
+      - 5432:5432
     environment:
       - POSTGRES_USER=blockscout
       - POSTGRES_PASSWORD=blockscout
@@ -25,6 +27,7 @@ services:
       - COIN=LA
       - ETHEREUM_JSONRPC_HTTP_URL=http://116.203.75.72:7070
       - ETHEREUM_JSONRPC_VARIANT=ganache
-      - DATABASE_URL=postgresql://blockscout:@blockscout-dev-postgresql:5432/blockscout?ssl=false
+      - DATABASE_URL=postgresql://blockscout:blockscout@blockscout-dev-postgresql:5432/blockscout?ssl=false
       - BLOCKSCOUT_HOST=postgres
-    network_mode: "host"
+      - SUBNETWORK=Devnet
+      - DATABASE_HOST=blockscout-dev-postgresql
