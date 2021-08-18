@@ -9,14 +9,15 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 data:
-  POSTGRES_ADDRESS: {{ pluck .Values.global.env .Values.configmap.POSTGRES_ADDRESS | first | default .Values.configmap.POSTGRES_ADDRESS.dev }}
-  POSTGRES_USER: {{ pluck .Values.global.env .Values.configmap.POSTGRES_USER | first | default .Values.configmap.POSTGRES_USER.dev }}
-  POSTGRES_PASSWORD: {{ pluck .Values.global.env .Values.configmap.POSTGRES_PASSWORD | first | default .Values.configmap.POSTGRES_PASSWORD.dev }}
-  POSTGRES_DB: {{ pluck .Values.global.env .Values.configmap.POSTGRES_DB | first | default .Values.configmap.POSTGRES_DB.dev }}
-  MIX_ENV: {{ pluck .Values.global.env .Values.configmap.MIX_ENV | first | default .Values.configmap.MIX_ENV.dev }}
-  COIN: {{ pluck .Values.global.env .Values.configmap.COIN | first | default .Values.configmap.COIN.dev }}
-  ETHEREUM_JSONRPC_HTTP_URL: {{ pluck .Values.global.env .Values.configmap.ETHEREUM_JSONRPC_HTTP_URL | first | default .Values.configmap.ETHEREUM_JSONRPC_HTTP_URL.dev }}
-  ETHEREUM_JSONRPC_VARIANT: {{ pluck .Values.global.env .Values.configmap.ETHEREUM_JSONRPC_VARIANT | first | default .Values.configmap.ETHEREUM_JSONRPC_VARIANT.dev }}
-  DATABASE_URL: {{ pluck .Values.global.env .Values.configmap.DATABASE_URL | first | default .Values.configmap.DATABASE_URL.dev }}
-  DATABASE_HOST: {{ pluck .Values.global.env .Values.configmap.DATABASE_HOST | first | default .Values.configmap.DATABASE_HOST.dev }}
-  BLOCKSCOUT_HOST: {{ pluck .Values.global.env .Values.configmap.BLOCKSCOUT_HOST | first | default .Values.configmap.BLOCKSCOUT_HOST.dev }}
+  {{- include "jvmdumps.configmap" .| nindent 2 -}}
+  {{- $env := .Values.global.env }}
+  GLOBAL_ENVIRONMENT: "{{ $env }}"
+  {{- range $k, $v := .Values.configmap }}
+    {{- if eq (kindOf $v) "map" }}
+  {{ $k }}: "{{ pluck $env $v | default (pluck "default" $v) | first | toString | replace "{env}" $env }}"
+    {{- else }}
+  {{ $k }}: "{{ $v | toString | replace "{env}" $env }}"
+    {{- end }}
+  {{- end }}
+{{- end }}
+

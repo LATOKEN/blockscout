@@ -14,7 +14,7 @@ metadata:
   {{- end }}
 spec:
   rules:
-    - host: {{ pluck .Values.global.env .Values.ingress.hosts | first | default .Values.ingress.hosts.dev }}
+    - host: {{ pluck .Values.global.env .Values.ingress.hosts |  default ( pluck "default" .Values.ingress.hosts) | first | replace "{env}" .Values.global.env }}
       http:
         paths:
           - path: {{ .Values.ingress.paths.value }}
@@ -23,7 +23,7 @@ spec:
               servicePort: {{ .Values.ingress.servicePort }}
   tls:
   - hosts:
-    - {{ pluck .Values.global.env .Values.ingress.hosts | first | default .Values.ingress.hosts.dev }}
+    - {{ pluck .Values.global.env .Values.ingress.hosts |  default ( pluck "default" .Values.ingress.hosts) | first | replace "{env}" .Values.global.env }}
     secretName: {{ .Release.Name }}
 {{- end }}
 
