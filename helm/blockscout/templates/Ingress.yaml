@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ .Release.Name }}
@@ -24,6 +24,6 @@ spec:
   tls:
   - hosts:
     - {{ pluck .Values.global.env .Values.ingress.hosts |  default ( pluck "default" .Values.ingress.hosts) | first | replace "{env}" .Values.global.env }}
-    secretName: {{ .Release.Name }}
+    secretName: {{ .Release.Name }}-tls
 {{- end }}
 
