@@ -33,7 +33,7 @@ service:
 
 configmap:
   POSTGRES_ADDRESS:
-    default: "jdbc:postgresql://blockscout:@blockscout-{env}-postgresql:5432/blockscout"
+    default: "jdbc:postgresql://blockscout:blockscout@blockscout-{env}-postgresql:5432/blockscout"
   POSTGRES_USER:
     default: "blockscout"
   POSTGRES_PASSWORD:
