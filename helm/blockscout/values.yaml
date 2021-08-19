@@ -65,7 +65,7 @@ configmap:
 postgresql:
   enabled: true
   persistence:
-    enabled: true
+    enabled: false
     accessMode: ReadWriteOnce
     size: 8Gi
   postgresqlUsername: blockscout
