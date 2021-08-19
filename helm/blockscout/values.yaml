@@ -66,8 +66,6 @@ postgresql:
   enabled: true
   persistence:
     enabled: false
-    accessMode: ReadWriteOnce
-    size: 8Gi
   postgresqlUsername: blockscout
   postgresqlPassword: blockscout
   postgresqlDatabase: blockscout
