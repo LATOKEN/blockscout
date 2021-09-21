@@ -21,7 +21,7 @@ defmodule BlockScoutWeb.LayoutViewTest do
     end
 
     test "use the default logo when there is no env configured for it" do
-      assert LayoutView.logo() == "/images/lachain.png"
+      assert LayoutView.logo() == "/images/Lachain_logo_black.svg"
     end
   end
 

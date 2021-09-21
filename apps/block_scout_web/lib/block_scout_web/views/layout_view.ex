@@ -28,12 +28,12 @@ defmodule BlockScoutWeb.LayoutView do
   alias BlockScoutWeb.SocialMedia
 
   def logo do
-    Keyword.get(application_config(), :logo) || "/images/lachain.png"
+    Keyword.get(application_config(), :logo) || "/images/Lachain_logo_black.svg"
   end
 
   def logo_footer do
     Keyword.get(application_config(), :logo_footer) || Keyword.get(application_config(), :logo) ||
-      "/images/lachain.png"
+      "/images/Lachain_logo_black.svg"
   end
 
   def logo_text do
