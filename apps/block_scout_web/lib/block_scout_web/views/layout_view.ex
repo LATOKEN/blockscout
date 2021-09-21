@@ -20,7 +20,7 @@ defmodule BlockScoutWeb.LayoutView do
     },
     %{
       title: "Devnet",
-      url: "https://blockscout-dev.dev3.nekotal.tech/",
+      url: "https://scan.lachain.io/",
       other?: true
     }
   ]
@@ -28,12 +28,12 @@ defmodule BlockScoutWeb.LayoutView do
   alias BlockScoutWeb.SocialMedia
 
   def logo do
-    Keyword.get(application_config(), :logo) || "/images/logo-full-dark.svg"
+    Keyword.get(application_config(), :logo) || "/images/lachain.png"
   end
 
   def logo_footer do
     Keyword.get(application_config(), :logo_footer) || Keyword.get(application_config(), :logo) ||
-      "/images/logo-full-dark.svg"
+      "/images/lachain.png"
   end
 
   def logo_text do
