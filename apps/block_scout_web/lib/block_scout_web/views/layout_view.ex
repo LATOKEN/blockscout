@@ -15,7 +15,7 @@ defmodule BlockScoutWeb.LayoutView do
     },
     %{
       title: "Testnet",
-      url: "https://blockscout-test.dev3.nekotal.tech/",
+      url: "https://scan-test.lachain.io/",
       test_net?: true
     },
     %{
