@@ -45,9 +45,9 @@ configmap:
   COIN:
     default: "LA"
   ETHEREUM_JSONRPC_HTTP_URL:
-    default: "http://95.217.6.234:7070"
+    default: "http://65.108.81.178:7070"
     dev: "http://95.217.6.234:7070"
-    test: "http://95.217.12.226:7070"
+    test: "http://23.88.105.143:7070"
   ETHEREUM_JSONRPC_VARIANT:
     default: "ganache"
   DATABASE_URL:
@@ -57,7 +57,7 @@ configmap:
   BLOCKSCOUT_HOST:
     default: "postgres"
   SUBNETWORK:
-    default: "Devnet"
+    default: "Mainnet"
     dev: "Devnet"
     test: "Testnet"
 

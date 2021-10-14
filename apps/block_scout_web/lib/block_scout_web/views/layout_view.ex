@@ -11,7 +11,7 @@ defmodule BlockScoutWeb.LayoutView do
   @default_other_networks [
     %{
       title: "Mainnet",
-      url: ""
+      url: "https://scan.lachain.io/"
     },
     %{
       title: "Testnet",
@@ -20,7 +20,7 @@ defmodule BlockScoutWeb.LayoutView do
     },
     %{
       title: "Devnet",
-      url: "https://scan.lachain.io/",
+      url: "https://scan-dev.lachain.io/",
       other?: true
     }
   ]
