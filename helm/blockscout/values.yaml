@@ -45,10 +45,10 @@ configmap:
   COIN:
     default: "LA"
   ETHEREUM_JSONRPC_HTTP_URL:
-    default: "https://rpc.lachain.io"
+    default: "https://rpc-mainnet.lachain.io"
     dev: "https://rpc-devnet.lachain.io"
     test: "https://rpc-testnet.lachain.io"
-    main: "https://rpc.lachain.io"
+    main: "https://rpc-mainnet.lachain.io"
   ETHEREUM_JSONRPC_VARIANT:
     default: "ganache"
   DATABASE_URL:
