@@ -13,7 +13,6 @@ services:
     volumes:
       - ./blockscout/postgresql:/var/lib/postgresql/data
       - ./scripts/:/docker-entrypoint-initdb.d/
-
   app:
     build:
       context: .

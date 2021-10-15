@@ -48,6 +48,7 @@ configmap:
     default: "https://rpc.lachain.io"
     dev: "https://rpc-devnet.lachain.io"
     test: "https://rpc-testnet.lachain.io"
+    main: "https://rpc.lachain.io"
   ETHEREUM_JSONRPC_VARIANT:
     default: "ganache"
   DATABASE_URL:
@@ -60,6 +61,7 @@ configmap:
     default: "Mainnet"
     dev: "Devnet"
     test: "Testnet"
+    main: "Mainnet"
 
 
 postgresql:
