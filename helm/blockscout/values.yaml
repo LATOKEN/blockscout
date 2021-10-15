@@ -45,9 +45,9 @@ configmap:
   COIN:
     default: "LA"
   ETHEREUM_JSONRPC_HTTP_URL:
-    default: "http://65.108.81.178:7070"
-    dev: "http://116.203.75.72:7070"
-    test: "http://23.88.105.143:7070"
+    default: "https://rpc.lachain.io"
+    dev: "https://rpc-devnet.lachain.io"
+    test: "https://rpc-testnet.lachain.io"
   ETHEREUM_JSONRPC_VARIANT:
     default: "ganache"
   DATABASE_URL:
