@@ -1,7 +1,7 @@
 version: '2.4'
 services:
-  postgres:
-    container_name: postgres
+  postgresql:
+    container_name: blockscout-dev-postgresql
     image: postgres:10.10
     restart: always
     ports:
@@ -13,13 +13,14 @@ services:
     volumes:
       - ./blockscout/postgresql:/var/lib/postgresql/data
       - ./scripts/:/docker-entrypoint-initdb.d/
-    network_mode: "host"
+
   app:
     build:
-      network: host
       context: .
       dockerfile: Dockerfile
     restart: always
+    ports:
+      - 4000:4000
     depends_on:
       - postgres
     environment:
