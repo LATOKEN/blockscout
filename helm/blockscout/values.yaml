@@ -47,7 +47,7 @@ configmap:
   ETHEREUM_JSONRPC_HTTP_URL:
     default: "https://rpc-mainnet.lachain.io"
     dev: "https://rpc-devnet.lachain.io"
-    test: "https://rpc-testnet.lachain.io"
+    test: "http://23.88.105.143:7070"
     main: "https://rpc-mainnet.lachain.io"
   ETHEREUM_JSONRPC_VARIANT:
     default: "ganache"
