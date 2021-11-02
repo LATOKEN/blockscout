@@ -4,7 +4,7 @@ defmodule EthereumJSONRPC.Receipts do
   [`eth_getTransactionReceipt`](https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionreceipt) from batch
   requests.
   """
-
+  require Logger
   import EthereumJSONRPC, only: [json_rpc: 2, request: 1]
 
   alias EthereumJSONRPC.{Logs, Receipt}
@@ -133,7 +133,8 @@ defmodule EthereumJSONRPC.Receipts do
         {requests, id_to_transaction_params}
       end)
 
-    with {:ok, responses} <- json_rpc(requests, json_rpc_named_arguments),
+    with {:ok, invalid_responses} <- json_rpc(requests, json_rpc_named_arguments),
+          responses <- fix_responses(invalid_responses),
          {:ok, receipts} <- reduce_responses(responses, id_to_transaction_params) do
       elixir_receipts = to_elixir(receipts)
 
@@ -142,6 +143,45 @@ defmodule EthereumJSONRPC.Receipts do
       logs = Logs.elixir_to_params(elixir_logs)
 
       {:ok, %{logs: logs, receipts: receipts}}
+    end
+  end
+
+
+  def fix_responses([]) do
+    []
+  end
+
+  def fix_responses([head | tail]) do
+    fixed_result = fix_resutl(head[:result])
+    fixed_head = %{head | result: fixed_result}
+    [fixed_head | fix_responses(tail)]
+  end
+
+  def fix_resutl(result) do
+    if result == nil do
+      result
+    else
+      fixed_logs = fix_logs(result["logs"] , result["blockHash"] , result["blockNumber"])
+      %{result | "logs" => fixed_logs}
+    end
+  end
+
+  def fix_logs([], _, _) do
+    []
+  end
+
+  def fix_logs([head | tail] , block_hash , block_number) do
+    current_block_hash = head["blockHash"]
+    current_block_number = head["blockNumber"]
+    cond do
+      current_block_hash != "0x" ->
+        [head | fix_logs(tail , block_hash , block_number)]
+      current_block_number != block_number ->
+        Logger.error("block number from logs: #{current_block_number} does not match block number from result: #{block_number}")
+        [head | fix_logs(tail , block_hash , block_number)]
+      true ->
+        fixed_head = %{head | "blockHash" => block_hash}
+        [fixed_head | fix_logs(tail , block_hash , block_number)]
     end
   end
 
