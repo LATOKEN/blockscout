@@ -169,6 +169,7 @@ defmodule EthereumJSONRPC.Receipts do
   def fix_logs([], _, _) do
     []
   end
+  
 
   def fix_logs([head | tail] , block_hash , block_number) do
     current_block_hash = head["blockHash"]
