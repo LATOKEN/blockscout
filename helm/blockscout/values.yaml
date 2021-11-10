@@ -46,7 +46,7 @@ configmap:
     default: "LA"
   ETHEREUM_JSONRPC_HTTP_URL:
     default: "http://65.108.81.178:7070"
-    dev: "http://116.203.75.72:7070"
+    dev: "http://95.217.6.234:7070"
     test: "http://65.108.84.19:7070"
     main: "http://65.108.81.178:7070"
   ETHEREUM_JSONRPC_VARIANT:
