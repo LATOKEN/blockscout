@@ -16,12 +16,12 @@
       <ul class="navbar-nav">
         <%= if Application.get_env(:block_scout_web, BlockScoutWeb.WebRouter)[:enabled] do %>
         <li class="nav-item">
-          <%= link to: block_path(@conn, :index), class: "dropdown-item #{tab_status("blocks", @conn.request_path)}" do %>
-            <span class="nav-link-icon">
-              <%= render BlockScoutWeb.IconsView, "_block_icon.html" %>
-            </span>
-            <%= gettext("Blocks") %>
-          <% end %>
+            <%= link to: block_path(@conn, :index), class: "nav-link topnav-nav-link #{tab_status("blocks", @conn.request_path)}" do %>
+              <span class="nav-link-icon">
+                <%= render BlockScoutWeb.IconsView, "_block_icon.html" %>
+              </span>
+              <%= gettext("Blocks") %>
+            <% end %>
         </li>
         <!--
           <li class="nav-item dropdown">
