@@ -32,12 +32,15 @@ defmodule EthereumJSONRPC do
     FetchedBalances,
     FetchedBeneficiaries,
     FetchedCodes,
+    Pool,
     Receipts,
     RequestCoordinator,
     Subscription,
     Transport,
     Variant
   }
+
+  require Logger
 
   @default_throttle_timeout :timer.minutes(2)
 
@@ -330,11 +333,18 @@ defmodule EthereumJSONRPC do
     )
   end
 
-  @doc """
-  Fetches pending transactions from variant API.
-  """
+
   def fetch_pending_transactions(json_rpc_named_arguments) do
-    Keyword.fetch!(json_rpc_named_arguments, :variant).fetch_pending_transactions(json_rpc_named_arguments)
+    with {:ok, responses} <-
+      Pool.request(0)
+      |> json_rpc(json_rpc_named_arguments)
+    do
+      {:ok, Pool.pending_transactions(responses , json_rpc_named_arguments)}
+    else
+      {msg , response} ->
+        Logger.error("error fetching transaction hashes from pool: #{msg}")
+        {msg , response}
+    end
   end
 
   @spec fetch_transaction_receipts(

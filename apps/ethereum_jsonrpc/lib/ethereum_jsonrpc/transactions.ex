@@ -156,4 +156,12 @@ defmodule EthereumJSONRPC.Transactions do
     |> Enum.map(&Transaction.to_elixir/1)
     |> Enum.filter(&(!is_nil(&1)))
   end
+
+  def request(id, transaction_hash) when is_integer(id) and is_binary(transaction_hash) do
+    EthereumJSONRPC.request(%{
+      id: id,
+      method: "eth_getTransactionByHash",
+      params: [transaction_hash]
+    })
+  end
 end
