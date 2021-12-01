@@ -10,6 +10,8 @@ defmodule BlockScoutWeb.TransactionView do
   alias Explorer.ExchangeRates.Token
   alias Timex.Duration
 
+  require Logger
+
   import BlockScoutWeb.Gettext
   import BlockScoutWeb.AddressView, only: [from_address_hash: 1, short_token_id: 2]
   import BlockScoutWeb.Tokens.Helpers
@@ -218,9 +220,11 @@ defmodule BlockScoutWeb.TransactionView do
 
   def token_type_name(type) do
     case type do
-      :erc20 -> gettext("ERC-20 ")
-      :erc721 -> gettext("ERC-721 ")
-      _ -> ""
+      "ERC-20" -> gettext("LARC-20 ")
+      "ERC-721" -> gettext("LARC-721 ")
+      x ->
+        Logger.error("unrecognized token type: #{x}")
+        gettext("TOKEN TYPE ")
     end
   end
 
