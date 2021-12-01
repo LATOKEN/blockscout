@@ -183,10 +183,19 @@ defmodule EthereumJSONRPC.Contract do
     full_params = %{
       id: id,
       method: "eth_call",
-      params: [%{to: contract_address, data: data, from: from}, block]
+      params: [get_params(contract_address , from, data), block]
     }
 
     request(full_params)
+  end
+
+  def get_params(contract_address, from , data) do
+    case {from , data} do
+      {nil , nil} -> %{to: contract_address}
+      {nil , data} -> %{to: contract_address , data: data}
+      {from , nil} -> %{to: contract_address , from: from}
+      {from , data} -> %{to: contract_address, data: data, from: from}
+    end
   end
 
   def eth_get_storage_at_request(contract_address, storage_pointer, block_number, json_rpc_named_arguments) do
