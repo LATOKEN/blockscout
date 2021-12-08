@@ -185,15 +185,15 @@ defmodule BlockScoutWeb.Etherscan do
         "name" => "Example Token",
         "decimals" => "18",
         "symbol" => "ET",
-        "type" => "ERC-20"
+        "type" => "LARC-20"
       },
       %{
         "balance" => "1",
         "contractAddress" => "0x0000000000000000000000000000000000000001",
-        "name" => "Example ERC-721 Token",
+        "name" => "Example LARC-721 Token",
         "decimals" => "18",
         "symbol" => "ET7",
-        "type" => "ERC-721"
+        "type" => "LARC-721"
       }
     ]
   }
@@ -266,7 +266,7 @@ defmodule BlockScoutWeb.Etherscan do
       "name" => "Example Token",
       "symbol" => "ET",
       "totalSupply" => "1000000000",
-      "type" => "ERC-20"
+      "type" => "LARC-20"
     }
   }
 
@@ -816,6 +816,7 @@ defmodule BlockScoutWeb.Etherscan do
     }
   }
 
+
   @token_transfer_model %{
     name: "TokenTransfer",
     fields: %{
@@ -917,8 +918,8 @@ defmodule BlockScoutWeb.Etherscan do
       decimals: @token_decimal_type,
       type: %{
         type: "token type",
-        enum: ~s(["ERC-20", "ERC-721"]),
-        enum_interpretation: %{"ERC-20" => "ERC-20 token standard", "ERC-721" => "ERC-721 token standard"}
+        enum: ~s(["LARC-20", "LARC-721"]),
+        enum_interpretation: %{"LARC-20" => "LARC-20 token standard", "LARC-721" => "LARC-721 token standard"}
       },
       cataloged: %{
         type: "boolean",
@@ -1162,7 +1163,7 @@ defmodule BlockScoutWeb.Etherscan do
   @account_eth_get_balance_action %{
     name: "eth_get_balance",
     description:
-      "Mimics Ethereum JSON RPC's eth_getBalance. Returns the balance as of the provided block (defaults to latest)",
+      "Mimics Lachain JSON RPC's eth_getBalance. Returns the balance as of the provided block (defaults to latest)",
     required_params: [
       %{
         key: "address",
@@ -1864,9 +1865,10 @@ defmodule BlockScoutWeb.Etherscan do
   @token_gettoken_action %{
     name: "getToken",
     description:
-      "Get <a href='https://github.com/ethereum/EIPs/issues/20'>ERC-20</a> " <>
-        "or <a href='https://github.com/ethereum/EIPs/issues/721'>ERC-721</a> token by contract address.",
-    required_params: [
+     # "Get <a href='https://github.com/ethereum/EIPs/issues/20'>ERC-20</a> " <>
+     #   "or <a href='https://github.com/ethereum/EIPs/issues/721'>ERC-721</a> token by contract address.",
+      "Get LARC-20 or LARC-721 token by contract address.",
+     required_params: [
       %{
         key: "contractaddress",
         placeholder: "contractAddressHash",
@@ -1953,9 +1955,10 @@ defmodule BlockScoutWeb.Etherscan do
   @stats_tokensupply_action %{
     name: "tokensupply",
     description:
-      "Get <a href='https://github.com/ethereum/EIPs/issues/20'>ERC-20</a> or " <>
-        "<a href='https://github.com/ethereum/EIPs/issues/721'>ERC-721</a> " <>
-        " token total supply by contract address.",
+      #"Get <a href='https://github.com/ethereum/EIPs/issues/20'>ERC-20</a> or " <>
+       # "<a href='https://github.com/ethereum/EIPs/issues/721'>ERC-721</a> " <>
+        #" token total supply by contract address.",
+        "Get LARC-20 or LARC-721 token total supply by contract address.",
     required_params: [
       %{
         key: "contractaddress",
@@ -2131,7 +2134,7 @@ defmodule BlockScoutWeb.Etherscan do
 
   @block_eth_block_number_action %{
     name: "eth_block_number",
-    description: "Mimics Ethereum JSON RPC's eth_blockNumber. Returns the lastest block number",
+    description: "Mimics Lachain JSON RPC's eth_blockNumber. Returns the lastest block number",
     required_params: [],
     optional_params: [
       %{
@@ -2771,6 +2774,8 @@ defmodule BlockScoutWeb.Etherscan do
     @contract_module,
     @transaction_module
   ]
+
+
 
   def get_documentation do
     @documentation
