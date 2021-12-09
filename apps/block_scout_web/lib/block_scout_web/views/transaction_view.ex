@@ -376,8 +376,25 @@ defmodule BlockScoutWeb.TransactionView do
   end
 
   def skip_decoding?(transaction) do
-    contract_creation?(transaction) || value_transfer?(transaction)
+    contract_creation?(transaction) || value_transfer?(transaction) || system_contract?(transaction)
   end
+
+  def system_contract?(%Transaction{to_address: %Explorer.Chain.Address{
+    hash: %Explorer.Chain.Hash{bytes: address}}}) do
+    hex_address = address_bytes_to_string(address)
+    case hex_address do
+      "0x0000000000000000000000000000000000000001" ->
+        true
+      "0x0000000000000000000000000000000000000002" ->
+        true
+      "0x0000000000000000000000000000000000000003" ->
+        true
+      _ ->
+        false
+    end
+  end
+
+  def address_bytes_to_string(hash), do: "0x" <> Base.encode16(hash, case: :lower)
 
   def decoded_input_data(transaction) do
     Transaction.decoded_input_data(transaction)
