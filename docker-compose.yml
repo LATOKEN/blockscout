@@ -28,6 +28,6 @@ services:
       - ETHEREUM_JSONRPC_HTTP_URL=http://23.88.105.143:7070
       - ETHEREUM_JSONRPC_VARIANT=ganache
       - DATABASE_URL=postgresql://blockscout:blockscout@blockscout-dev-postgresql:5432/blockscout?ssl=false
-      - BLOCKSCOUT_HOST=postgres
+      - BLOCKSCOUT_HOST=localhost
       - SUBNETWORK=Devnet
       - DATABASE_HOST=blockscout-dev-postgresql

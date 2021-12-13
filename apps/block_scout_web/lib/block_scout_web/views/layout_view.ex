@@ -200,6 +200,21 @@ defmodule BlockScoutWeb.LayoutView do
     _ -> []
   end
 
+  def get_url do
+    title = subnetwork_title()
+    get_url_from_list(@default_other_networks , title)
+  end
+
+  def get_url_from_list([] , _), do: ""
+
+  def get_url_from_list([head | rest] , title) do
+    if head[:title] == title do
+      head[:url]
+    else
+      get_url_from_list(rest , title)
+    end
+  end
+
   def webapp_url(conn) do
     :block_scout_web
     |> Application.get_env(:webapp_url)
