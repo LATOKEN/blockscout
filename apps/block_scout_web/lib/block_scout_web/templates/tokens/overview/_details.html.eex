@@ -68,7 +68,7 @@
               <% end %>
             </span>
             <div class="d-flex flex-row justify-content-start text-muted">
-              <span class="mr-4"> <%= BlockScoutWeb.TransactionView.token_type_name(@token.type) %> </span>
+              <span class="mr-4"> <%= @token.type %> </span>
               <span token-holder-count class="mr-4"></span>
               <span token-transfer-count class="mr-4"></span>
               <%= if decimals?(@token) do %>
