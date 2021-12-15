@@ -136,8 +136,8 @@ defmodule Explorer.ChainTest do
     end
   end
 
-  describe "ERC721_token_instance_from_token_id_and_token_address/2" do
-    test "return ERC721 token instance" do
+  describe "LARC721_token_instance_from_token_id_and_token_address/2" do
+    test "return LARC721 token instance" do
       contract_address = insert(:address)
 
       token_id = 10
@@ -149,7 +149,7 @@ defmodule Explorer.ChainTest do
       )
 
       assert {:ok, result} =
-               Chain.erc721_token_instance_from_token_id_and_token_address(token_id, contract_address.hash)
+               Chain.larc721_token_instance_from_token_id_and_token_address(token_id, contract_address.hash)
 
       assert result.token_id == Decimal.new(token_id)
     end
@@ -1624,7 +1624,7 @@ defmodule Explorer.ChainTest do
         params: [
           %{
             contract_address_hash: "0x8bf38d4764929064f2d4d3a56520a76ab3df415b",
-            type: "ERC-20"
+            type: "LARC-20"
           }
         ]
       },
@@ -1782,7 +1782,7 @@ defmodule Explorer.ChainTest do
                         <<139, 243, 141, 71, 100, 146, 144, 100, 242, 212, 211, 165, 101, 32, 167, 106, 179, 223, 65,
                           91>>
                     },
-                    type: "ERC-20",
+                    type: "LARC-20",
                     inserted_at: %{},
                     updated_at: %{}
                   }
@@ -4456,7 +4456,7 @@ defmodule Explorer.ChainTest do
   describe "stream_unfetched_token_instances/2" do
     test "reduces wuth given reducer and accumulator" do
       token_contract_address = insert(:contract_address)
-      token = insert(:token, contract_address: token_contract_address, type: "ERC-721")
+      token = insert(:token, contract_address: token_contract_address, type: "LARC-721")
 
       transaction =
         :transaction
@@ -4481,7 +4481,7 @@ defmodule Explorer.ChainTest do
 
     test "does not fetch token transfers without token id" do
       token_contract_address = insert(:contract_address)
-      token = insert(:token, contract_address: token_contract_address, type: "ERC-721")
+      token = insert(:token, contract_address: token_contract_address, type: "LARC-721")
 
       transaction =
         :transaction
@@ -4503,7 +4503,7 @@ defmodule Explorer.ChainTest do
 
     test "do not fetch records with token instances" do
       token_contract_address = insert(:contract_address)
-      token = insert(:token, contract_address: token_contract_address, type: "ERC-721")
+      token = insert(:token, contract_address: token_contract_address, type: "LARC-721")
 
       transaction =
         :transaction
@@ -4810,7 +4810,7 @@ defmodule Explorer.ChainTest do
   describe "address_to_unique_tokens/2" do
     test "unique tokens can be paginated through token_id" do
       token_contract_address = insert(:contract_address)
-      token = insert(:token, contract_address: token_contract_address, type: "ERC-721")
+      token = insert(:token, contract_address: token_contract_address, type: "LARC-721")
 
       insert(
         :token_instance,
@@ -5053,7 +5053,7 @@ defmodule Explorer.ChainTest do
   end
 
   describe "transaction_token_transfer_type/1" do
-    test "detects erc721 token transfer" do
+    test "detects larc721 token transfer" do
       from_address_hash = "0x7a30272c902563b712245696f0a81c5a0e45ddc8"
       to_address_hash = "0xb544cead8b660aae9f2e37450f7be2ffbc501793"
       from_address = insert(:address, hash: from_address_hash)
@@ -5071,10 +5071,10 @@ defmodule Explorer.ChainTest do
 
       insert(:token_transfer, from_address: from_address, to_address: to_address, transaction: transaction)
 
-      assert :erc721 = Chain.transaction_token_transfer_type(Repo.preload(transaction, token_transfers: :token))
+      assert :larc721 = Chain.transaction_token_transfer_type(Repo.preload(transaction, token_transfers: :token))
     end
 
-    test "detects erc20 token transfer" do
+    test "detects larc20 token transfer" do
       from_address_hash = "0x5881fdfE964bE26aC6C8e5153C4ad1c83181C024"
       to_address_hash = "0xE113127804Ae2383f63Fe8cE31B212D5CB85113d"
       from_address = insert(:address, hash: from_address_hash)
@@ -5097,7 +5097,7 @@ defmodule Explorer.ChainTest do
         amount: 8_025_000_000_000_000_000_000
       )
 
-      assert :erc20 = Chain.transaction_token_transfer_type(Repo.preload(transaction, token_transfers: :token))
+      assert :larc20 = Chain.transaction_token_transfer_type(Repo.preload(transaction, token_transfers: :token))
     end
   end
 

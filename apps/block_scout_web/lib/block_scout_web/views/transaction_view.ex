@@ -220,8 +220,8 @@ defmodule BlockScoutWeb.TransactionView do
 
   def token_type_name(type) do
     case type do
-      "ERC-20" -> gettext("LARC-20 ")
-      "ERC-721" -> gettext("LARC-721 ")
+      "LARC-20" -> gettext("LARC-20")
+      "LARC-721" -> gettext("LARC-721")
       x ->
         Logger.error("unrecognized token type: #{x}")
         gettext("TOKEN TYPE ")

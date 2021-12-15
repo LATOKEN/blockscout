@@ -2803,7 +2803,7 @@ defmodule Explorer.Chain do
           right_join:
             missing_range in fragment(
               """
-                (SELECT b1.number 
+                (SELECT b1.number
                 FROM generate_series(0, (?)::integer) AS b1(number)
                 WHERE NOT EXISTS
                   (SELECT 1 FROM blocks b2 WHERE b2.number=b1.number AND b2.consensus))
@@ -2890,7 +2890,7 @@ defmodule Explorer.Chain do
         right_join:
           missing_range in fragment(
             """
-              (SELECT distinct b1.number 
+              (SELECT distinct b1.number
               FROM generate_series((?)::integer, (?)::integer) AS b1(number)
               WHERE NOT EXISTS
                 (SELECT 1 FROM blocks b2 WHERE b2.number=b1.number AND b2.consensus))
@@ -3764,7 +3764,7 @@ defmodule Explorer.Chain do
   Updates a `t:SmartContract.t/0`.
 
   Has the similar logic as create_smart_contract/1.
-  Used in cases when you need to update row in DB contains SmartContract, e.g. in case of changing 
+  Used in cases when you need to update row in DB contains SmartContract, e.g. in case of changing
   status `partially verified` to `fully verified` (re-verify).
   """
   @spec update_smart_contract(map()) :: {:ok, SmartContract.t()} | {:error, Ecto.Changeset.t()}
@@ -4352,7 +4352,7 @@ defmodule Explorer.Chain do
     nft_tokens =
       from(
         token in Token,
-        where: token.type == ^"ERC-721",
+        where: token.type == ^"LARC-721",
         select: token.contract_address_hash
       )
 
@@ -4761,7 +4761,7 @@ defmodule Explorer.Chain do
 
   # Fetches custom metadata for bridged tokens from the node.
   # Currently, gets Balancer token composite tokens with their weights
-  # from foreign chain 
+  # from foreign chain
   defp get_bridged_token_custom_metadata(foreign_token_address_hash, json_rpc_named_arguments, foreign_json_rpc)
        when not is_nil(foreign_json_rpc) and foreign_json_rpc !== "" do
     eth_call_foreign_json_rpc_named_arguments =
@@ -5461,9 +5461,9 @@ defmodule Explorer.Chain do
     |> Repo.all()
   end
 
-  @spec erc721_token_instance_from_token_id_and_token_address(binary(), Hash.Address.t()) ::
+  @spec larc721_token_instance_from_token_id_and_token_address(binary(), Hash.Address.t()) ::
           {:ok, TokenTransfer.t()} | {:error, :not_found}
-  def erc721_token_instance_from_token_id_and_token_address(token_id, token_contract_address) do
+  def larc721_token_instance_from_token_id_and_token_address(token_id, token_contract_address) do
     query =
       from(tt in TokenTransfer,
         left_join: instance in Instance,
@@ -5658,7 +5658,7 @@ defmodule Explorer.Chain do
   end
 
   @spec transaction_token_transfer_type(Transaction.t()) ::
-          :erc20 | :erc721 | :token_transfer | nil
+          :larc20 | :larc721 | :token_transfer | nil
   def transaction_token_transfer_type(
         %Transaction{
           status: :ok,
@@ -5689,24 +5689,24 @@ defmodule Explorer.Chain do
         types = [:address, :address, {:uint, 256}]
         [from_address, to_address, _value] = decode_params(params, types)
 
-        find_erc721_token_transfer(transaction.token_transfers, {from_address, to_address})
+        find_larc721_token_transfer(transaction.token_transfers, {from_address, to_address})
 
       # safeTransferFrom(address,address,uint256)
       {"0x42842e0e" <> params, ^zero_wei} ->
         types = [:address, :address, {:uint, 256}]
         [from_address, to_address, _value] = decode_params(params, types)
 
-        find_erc721_token_transfer(transaction.token_transfers, {from_address, to_address})
+        find_larc721_token_transfer(transaction.token_transfers, {from_address, to_address})
 
       # safeTransferFrom(address,address,uint256,bytes)
       {"0xb88d4fde" <> params, ^zero_wei} ->
         types = [:address, :address, {:uint, 256}, :bytes]
         [from_address, to_address, _value, _data] = decode_params(params, types)
 
-        find_erc721_token_transfer(transaction.token_transfers, {from_address, to_address})
+        find_larc721_token_transfer(transaction.token_transfers, {from_address, to_address})
 
       {"0xf907fc5b" <> _params, ^zero_wei} ->
-        :erc20
+        :larc20
 
       # check for ERC 20 or for old ERC 721 token versions
       {unquote(TokenTransfer.transfer_function_signature()) <> params, ^zero_wei} ->
@@ -5716,23 +5716,23 @@ defmodule Explorer.Chain do
 
         decimal_value = Decimal.new(value)
 
-        find_erc721_or_erc20_token_transfer(transaction.token_transfers, {address, decimal_value})
+        find_larc721_or_larc20_token_transfer(transaction.token_transfers, {address, decimal_value})
 
       _ ->
         nil
     end
   end
 
-  defp find_erc721_token_transfer(token_transfers, {from_address, to_address}) do
+  defp find_larc721_token_transfer(token_transfers, {from_address, to_address}) do
     token_transfer =
       Enum.find(token_transfers, fn token_transfer ->
         token_transfer.from_address_hash.bytes == from_address && token_transfer.to_address_hash.bytes == to_address
       end)
 
-    if token_transfer, do: :erc721
+    if token_transfer, do: :larc721
   end
 
-  defp find_erc721_or_erc20_token_transfer(token_transfers, {address, decimal_value}) do
+  defp find_larc721_or_larc20_token_transfer(token_transfers, {address, decimal_value}) do
     token_transfer =
       Enum.find(token_transfers, fn token_transfer ->
         token_transfer.to_address_hash.bytes == address && token_transfer.amount == decimal_value
@@ -5740,12 +5740,12 @@ defmodule Explorer.Chain do
 
     if token_transfer do
       case token_transfer.token do
-        %Token{type: "ERC-20"} -> :erc20
-        %Token{type: "ERC-721"} -> :erc721
+        %Token{type: "LARC-20"} -> :larc20
+        %Token{type: "LARC-721"} -> :larc721
         _ -> nil
       end
     else
-      :erc20
+      :larc20
     end
   end
 
@@ -6331,19 +6331,19 @@ defmodule Explorer.Chain do
       ...>  token_contract_address: contract_address,
       ...>  token_id: token_id
       ...> )
-      iex> Explorer.Chain.check_erc721_token_instance_exists(token_id, contract_address.hash)
+      iex> Explorer.Chain.check_larc721_token_instance_exists(token_id, contract_address.hash)
       :ok
 
   Returns `:not_found` if not found
 
       iex> {:ok, hash} = Explorer.Chain.string_to_address_hash("0x5aaeb6053f3e94c9b9a09f33669435e7ef1beaed")
-      iex> Explorer.Chain.check_erc721_token_instance_exists(10, hash)
+      iex> Explorer.Chain.check_larc721_token_instance_exists(10, hash)
       :not_found
   """
-  @spec check_erc721_token_instance_exists(binary() | non_neg_integer(), Hash.Address.t()) :: :ok | :not_found
-  def check_erc721_token_instance_exists(token_id, hash) do
+  @spec check_larc721_token_instance_exists(binary() | non_neg_integer(), Hash.Address.t()) :: :ok | :not_found
+  def check_larc721_token_instance_exists(token_id, hash) do
     token_id
-    |> erc721_token_instance_exist?(hash)
+    |> larc721_token_instance_exist?(hash)
     |> boolean_to_check_result()
   end
 
@@ -6359,17 +6359,17 @@ defmodule Explorer.Chain do
       ...>  token_contract_address: contract_address,
       ...>  token_id: token_id
       ...> )
-      iex> Explorer.Chain.erc721_token_instance_exist?(token_id, contract_address.hash)
+      iex> Explorer.Chain.larc721_token_instance_exist?(token_id, contract_address.hash)
       true
 
   Returns `false` if not found
 
       iex> {:ok, hash} = Explorer.Chain.string_to_address_hash("0x5aaeb6053f3e94c9b9a09f33669435e7ef1beaed")
-      iex> Explorer.Chain.erc721_token_instance_exist?(10, hash)
+      iex> Explorer.Chain.larc721_token_instance_exist?(10, hash)
       false
   """
-  @spec erc721_token_instance_exist?(binary() | non_neg_integer(), Hash.Address.t()) :: boolean()
-  def erc721_token_instance_exist?(token_id, hash) do
+  @spec larc721_token_instance_exist?(binary() | non_neg_integer(), Hash.Address.t()) :: boolean()
+  def larc721_token_instance_exist?(token_id, hash) do
     query =
       from(tt in TokenTransfer,
         where: tt.token_contract_address_hash == ^hash and tt.token_id == ^token_id

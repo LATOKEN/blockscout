@@ -994,12 +994,12 @@ msgstr ""
 
 #, elixir-format
 #: lib/block_scout_web/views/transaction_view.ex:221
-msgid "ERC-20 "
+msgid "LARC-20 "
 msgstr ""
 
 #, elixir-format
 #: lib/block_scout_web/views/transaction_view.ex:222
-msgid "ERC-721 "
+msgid "LARC-721 "
 msgstr ""
 
 #, elixir-format
@@ -1377,7 +1377,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/block_scout_web/templates/transaction/overview.html.eex:267
-msgid "List of ERC-1155 tokens created in the transaction."
+msgid "List of LARC-1155 tokens created in the transaction."
 msgstr ""
 
 #, elixir-format

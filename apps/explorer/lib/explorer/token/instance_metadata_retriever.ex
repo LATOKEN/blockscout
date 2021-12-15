@@ -1,6 +1,6 @@
 defmodule Explorer.Token.InstanceMetadataRetriever do
   @moduledoc """
-  Fetches ERC721 token instance metadata.
+  Fetches LARC721 token instance metadata.
   """
 
   require Logger

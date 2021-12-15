@@ -6,8 +6,8 @@ defmodule Explorer.Chain.Token do
 
   The following types of tokens are indexed:
 
-  * ERC-20
-  * ERC-721
+  * LARC-20
+  * LARC-721
 
   ## Token Specifications
 
