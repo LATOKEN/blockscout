@@ -152,24 +152,38 @@ defmodule EthereumJSONRPC.Receipts do
   end
 
   def fix_responses([head | tail]) do
-    fixed_result = fix_resutl(head[:result])
-    fixed_head = %{head | result: fixed_result}
-    [fixed_head | fix_responses(tail)]
+    [fix_responses(head) | fix_responses(tail)]
   end
 
-  def fix_resutl(result) do
-    if result == nil do
-      result
-    else
-      fixed_logs = fix_logs(result["logs"] , result["blockHash"] , result["blockNumber"])
-      %{result | "logs" => fixed_logs}
+  def fix_responses(response) when not is_list(response) do
+
+    result = fix_result(response[:result])
+    %{response | result: result}
+
+  end
+
+  def fix_result(result) do
+
+    case result do
+      nil ->
+        result
+      "" ->
+        result
+      _ ->
+        fixed_logs = fix_logs(result["logs"] , result["blockHash"] , result["blockNumber"])
+        %{result | "logs" => fixed_logs}
     end
+
+  end
+
+  def fix_logs(logs, _, _) when not is_list(logs) do
+    Logger.error("Logs should always be a list, found these as logs: #{inspect(logs)}")
   end
 
   def fix_logs([], _, _) do
     []
   end
-  
+
 
   def fix_logs([head | tail] , block_hash , block_number) do
     current_block_hash = head["blockHash"]
@@ -178,7 +192,7 @@ defmodule EthereumJSONRPC.Receipts do
       current_block_hash != "0x" ->
         [head | fix_logs(tail , block_hash , block_number)]
       current_block_number != block_number ->
-        Logger.error("block number from logs: #{current_block_number} does not match block number from result: #{block_number}")
+        Logger.error("block number from logs: #{inspect(current_block_number)} does not match block number from result: #{inspect(block_number)}")
         [head | fix_logs(tail , block_hash , block_number)]
       true ->
         fixed_head = %{head | "blockHash" => block_hash}
