@@ -1,6 +1,10 @@
 defmodule Indexer.Transform.TokenTransfers do
   @moduledoc """
   Helper functions for transforming data for LARC-20 and LARC-721 token transfers.
+
+  We have only the first topic and data in logs. For now all tokens are marked as LARC-20.
+  For a token transfer data gives the address hash of sender and receiver and the amount
+  tranfered. Observing for token swap.
   """
 
   require Logger
@@ -87,6 +91,36 @@ defmodule Indexer.Transform.TokenTransfers do
     {token, token_transfer}
   end
 
+  # LARC-20 token transfer with info in data field instead of in log topics
+  defp parse_params(%{second_topic: nil, third_topic: nil, fourth_topic: nil, data: data} = log)
+       when not is_nil(data) do
+
+
+
+    [from_address_hash, to_address_hash, amount] = decode_data(data, [:address, :address, {:uint, 256}])
+
+    token_transfer = %{
+      amount: Decimal.new(amount || 0),
+      block_number: log.block_number,
+      block_hash: log.block_hash,
+      log_index: log.index,
+      from_address_hash: encode_address_hash(from_address_hash),
+      to_address_hash: encode_address_hash(to_address_hash),
+      token_contract_address_hash: log.address_hash,
+      transaction_hash: log.transaction_hash,
+      token_type: "LARC-20"
+    }
+
+    token = %{
+      contract_address_hash: log.address_hash,
+      type: "LARC-20"
+    }
+
+
+
+    {token, token_transfer}
+  end
+
   # LARC-721 token transfer with topics as addresses
   defp parse_params(%{second_topic: second_topic, third_topic: third_topic, fourth_topic: fourth_topic} = log)
        when not is_nil(second_topic) and not is_nil(third_topic) and not is_nil(fourth_topic) do
@@ -116,35 +150,7 @@ defmodule Indexer.Transform.TokenTransfers do
     {token, token_transfer}
   end
 
-  # LARC-721 token transfer with info in data field instead of in log topics
-  defp parse_params(%{second_topic: nil, third_topic: nil, fourth_topic: nil, data: data} = log)
-       when not is_nil(data) do
 
-
-
-    [from_address_hash, to_address_hash, token_id] = decode_data(data, [:address, :address, {:uint, 256}])
-
-    token_transfer = %{
-      block_number: log.block_number,
-      block_hash: log.block_hash,
-      log_index: log.index,
-      from_address_hash: encode_address_hash(from_address_hash),
-      to_address_hash: encode_address_hash(to_address_hash),
-      token_contract_address_hash: log.address_hash,
-      token_id: token_id,
-      transaction_hash: log.transaction_hash,
-      token_type: "LARC-721"
-    }
-
-    token = %{
-      contract_address_hash: log.address_hash,
-      type: "LARC-721"
-    }
-
-
-
-    {token, token_transfer}
-  end
 
   defp update_token(nil), do: :ok
 
