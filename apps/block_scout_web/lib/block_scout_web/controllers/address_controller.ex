@@ -1,3 +1,5 @@
+require Logger
+
 defmodule BlockScoutWeb.AddressController do
   use BlockScoutWeb, :controller
 
@@ -6,6 +8,7 @@ defmodule BlockScoutWeb.AddressController do
   alias BlockScoutWeb.{AccessHelpers, AddressView, Controller}
   alias Explorer.Counters.{AddressTransactionsCounter, AddressTransactionsGasUsageCounter}
   alias Explorer.{Chain, Market}
+  alias Explorer.Chain.Address
   alias Explorer.ExchangeRates.Token
   alias Phoenix.View
 
@@ -14,6 +17,18 @@ defmodule BlockScoutWeb.AddressController do
       params
       |> paging_options()
       |> Chain.list_top_addresses()
+
+    addresses_to_hide = [
+      "0x0000000000000000000000000000000000000001",
+      "0x0000000000000000000000000000000000000002",
+      "0x0000000000000000000000000000000000000003",
+      "0x0000000000000000000000000000000000000004",
+      "0x0000000000000000000000000000000000000005",
+      "0x0000000000000000000000000000000000000006",
+      "0x0000000000000000000000000000000000000007",
+      "0x0000000000000000000000000000000000000008",
+      "0x0000000000000000000000000000000000000009"
+    ]
 
     {addresses_page, next_page} = split_list_by_page(addresses)
 
@@ -47,15 +62,17 @@ defmodule BlockScoutWeb.AddressController do
       addresses_page
       |> Enum.with_index(1)
       |> Enum.map(fn {{address, tx_count}, index} ->
-        View.render_to_string(
-          AddressView,
-          "_tile.html",
-          address: address,
-          index: items_count + index,
-          exchange_rate: exchange_rate,
-          total_supply: total_supply,
-          tx_count: tx_count
-        )
+        if(Address.checksum(address.hash) not in addresses_to_hide) do
+          View.render_to_string(
+            AddressView,
+            "_tile.html",
+            address: address,
+            index: items_count + index,
+            exchange_rate: exchange_rate,
+            total_supply: total_supply,
+            tx_count: tx_count
+          ) 
+        end
       end)
 
     json(
