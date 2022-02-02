@@ -24,25 +24,24 @@ You can also access the dev chatroom on our [Gitter Channel](https://gitter.im/p
 
 BlockScout is an Elixir application that allows users to search transactions, view accounts and balances, and verify smart contracts on the Ethereum network including all forks and sidechains.
 
-Currently available full-featured block explorers (Etherscan, Etherchain, Blockchair) are closed systems which are not independently verifiable.  As Ethereum sidechains continue to proliferate in both private and public settings, transparent, open-source tools are needed to analyze and validate transactions.
+Currently available full-featured block explorers (Etherscan, Etherchain, Blockchair) are closed systems which are not independently verifiable. As Ethereum sidechains continue to proliferate in both private and public settings, transparent, open-source tools are needed to analyze and validate transactions.
 
 ## Supported Projects
 
-BlockScout supports a number of projects. Hosted instances include POA Network, xDai Chain, Ethereum Classic, Sokol & Kovan testnets, and other EVM chains. 
+BlockScout supports a number of projects. Hosted instances include POA Network, xDai Chain, Ethereum Classic, Sokol & Kovan testnets, and other EVM chains.
 
 - [List of hosted mainnets, testnets, and additional chains using BlockScout](https://docs.blockscout.com/for-projects/supported-projects)
 - [Hosted instance versions](https://docs.blockscout.com/about/use-cases/hosted-blockscout)
 
-
 ## Getting Started
 
 See the [project documentation](https://docs.blockscout.com/) for instructions:
+
 - [Requirements](https://docs.blockscout.com/for-developers/information-and-settings/requirements)
 - [Ansible deployment](https://docs.blockscout.com/for-developers/ansible-deployment)
 - [Manual deployment](https://docs.blockscout.com/for-developers/manual-deployment)
 - [ENV variables](https://docs.blockscout.com/for-developers/information-and-settings/env-variables)
 - [Configuration options](https://docs.blockscout.com/for-developers/configuration-options)
-
 
 ## Acknowledgements
 
