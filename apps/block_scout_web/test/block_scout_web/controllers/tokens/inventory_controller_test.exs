@@ -1,8 +1,6 @@
 defmodule BlockScoutWeb.Tokens.InventoryControllerTest do
   use BlockScoutWeb.ConnCase, async: false
 
-  require Logger
-
   describe "GET index/3" do
     test "with invalid address hash", %{conn: conn} do
       conn = get(conn, token_inventory_path(conn, :index, "invalid_address"))

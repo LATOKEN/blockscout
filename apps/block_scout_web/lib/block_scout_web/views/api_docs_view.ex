@@ -57,7 +57,6 @@ defmodule BlockScoutWeb.APIDocsView do
         url_params[:path]
       end
 
-
     if host != "localhost" do
       LayoutView.get_url() <> "#{path}"
     else

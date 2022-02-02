@@ -4,6 +4,7 @@ defmodule EthereumJSONRPC.Receipts do
   [`eth_getTransactionReceipt`](https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionreceipt) from batch
   requests.
   """
+
   require Logger
   import EthereumJSONRPC, only: [json_rpc: 2, request: 1]
 
@@ -133,6 +134,7 @@ defmodule EthereumJSONRPC.Receipts do
         {requests, id_to_transaction_params}
       end)
 
+
     with {:ok, invalid_responses} <- json_rpc(requests, json_rpc_named_arguments),
           responses <- fix_responses(invalid_responses),
          {:ok, receipts} <- reduce_responses(responses, id_to_transaction_params) do
@@ -145,7 +147,6 @@ defmodule EthereumJSONRPC.Receipts do
       {:ok, %{logs: logs, receipts: receipts}}
     end
   end
-
 
   def fix_responses([]) do
     []
@@ -183,7 +184,6 @@ defmodule EthereumJSONRPC.Receipts do
   def fix_logs([], _, _) do
     []
   end
-
 
   def fix_logs([head | tail] , block_hash , block_number) do
     current_block_hash = head["blockHash"]

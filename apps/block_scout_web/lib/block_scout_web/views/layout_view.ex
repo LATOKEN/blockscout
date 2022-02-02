@@ -32,8 +32,7 @@ defmodule BlockScoutWeb.LayoutView do
   end
 
   def logo_footer do
-    Keyword.get(application_config(), :logo_footer) || Keyword.get(application_config(), :logo) ||
-      "/images/Lachain_logo_black.svg"
+    Keyword.get(application_config(), :logo_footer) || Keyword.get(application_config(), :logo) || "/images/Lachain_logo_black.svg"
   end
 
   def logo_text do
@@ -41,11 +40,11 @@ defmodule BlockScoutWeb.LayoutView do
   end
 
   def subnetwork_title do
-    Keyword.get(application_config(), :subnetwork) || "LA"
+    Keyword.get(application_config(), :subnetwork) || "Sokol"
   end
 
   def network_title do
-    Keyword.get(application_config(), :network) || "LA"
+    Keyword.get(application_config(), :network) || "POA"
   end
 
   defp application_config do
@@ -58,7 +57,7 @@ defmodule BlockScoutWeb.LayoutView do
 
   def issue_link(conn) do
     params = [
-      labels: "LATOKEN",
+      labels: "BlockScout",
       body: issue_body(conn),
       title: subnetwork_title() <> ": <Issue Title>"
     ]

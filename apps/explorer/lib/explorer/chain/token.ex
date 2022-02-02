@@ -8,13 +8,14 @@ defmodule Explorer.Chain.Token do
 
   * LARC-20
   * LARC-721
+  * LARC-1155
 
   ## Token Specifications
 
-  * [ERC-20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md)
-  * [ERC-721](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md)
+  * [LARC-20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md)
+  * [LARC-721](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md)
   * [ERC-777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md)
-  * [ERC-1155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1155.md)
+  * [LARC-1155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1155.md)
   """
 
   use Explorer.Schema

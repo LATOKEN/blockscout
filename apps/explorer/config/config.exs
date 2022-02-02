@@ -8,7 +8,7 @@ use Mix.Config
 # General application configuration
 config :explorer,
   ecto_repos: [Explorer.Repo],
-  coin: System.get_env("COIN") || "LA",
+  coin: System.get_env("COIN") || "POA",
   coingecko_coin_id: System.get_env("COINGECKO_COIN_ID"),
   token_functions_reader_max_retries: 3,
   allowed_evm_versions:
@@ -103,6 +103,18 @@ config :explorer, Explorer.Counters.TokenTransfersCounter,
   enable_consolidation: true
 
 config :explorer, Explorer.Counters.AddressTransactionsCounter,
+  enabled: true,
+  enable_consolidation: true
+
+config :explorer, Explorer.Counters.AddressTokenTransfersCounter,
+  enabled: true,
+  enable_consolidation: true
+
+config :explorer, Explorer.Counters.BlockBurnedFeeCounter,
+  enabled: true,
+  enable_consolidation: true
+
+config :explorer, Explorer.Counters.BlockPriorityFeeCounter,
   enabled: true,
   enable_consolidation: true
 
@@ -228,18 +240,11 @@ config :explorer, Explorer.Chain.Cache.Accounts,
   ttl_check_interval: if(System.get_env("DISABLE_INDEXER") == "true", do: :timer.seconds(1), else: false),
   global_ttl: if(System.get_env("DISABLE_INDEXER") == "true", do: :timer.seconds(5))
 
-config :explorer, Explorer.Chain.Cache.PendingTransactions,
-  enabled:
-    if(System.get_env("ETHEREUM_JSONRPC_VARIANT") == "besu",
-      do: false,
-      else: true
-    ),
-  ttl_check_interval: if(System.get_env("DISABLE_INDEXER") == "true", do: :timer.seconds(1), else: false),
-  global_ttl: if(System.get_env("DISABLE_INDEXER") == "true", do: :timer.seconds(5))
-
 config :explorer, Explorer.Chain.Cache.Uncles,
   ttl_check_interval: if(System.get_env("DISABLE_INDEXER") == "true", do: :timer.seconds(1), else: false),
   global_ttl: if(System.get_env("DISABLE_INDEXER") == "true", do: :timer.seconds(5))
+
+config :explorer, Explorer.Chain.Cache.GasUsage, enabled: false
 
 config :explorer, Explorer.ThirdPartyIntegrations.Sourcify,
   server_url: System.get_env("SOURCIFY_SERVER_URL") || "https://sourcify.dev/server",
