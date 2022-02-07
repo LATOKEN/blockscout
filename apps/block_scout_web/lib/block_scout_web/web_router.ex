@@ -52,6 +52,8 @@ defmodule BlockScoutWeb.WebRouter do
 
     get("/txs", TransactionController, :index)
 
+    get("/staker", StakerController, :index)
+
     resources "/tx", TransactionController, only: [:show] do
       resources(
         "/internal-transactions",

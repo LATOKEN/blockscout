@@ -3,6 +3,8 @@ defmodule Indexer.Transform.Blocks do
   Protocol for transforming blocks.
   """
 
+  require Logger
+
   @type block :: map()
 
   @doc """
@@ -89,4 +91,39 @@ defmodule Indexer.Transform.Blocks do
     miner_address = Base.encode16(public_key, case: :lower)
     "0x" <> miner_address
   end
+
+  #takes public key in bytes, returns the corresponding address in bytes
+
+  def get_address_from_compressed_pubkey(public_key) do
+    with {:ok, uncompressed_pubkey} <- :libsecp256k1.ec_pubkey_decompress(public_key)
+    do
+      get_address_from_decompressed_pubkey(uncompressed_pubkey)
+    else
+      error ->
+        Logger.error("got error while decompressing public key: #{inspect(error)}")
+    end
+  end
+
+  def get_address_from_decompressed_pubkey(public_key) do
+    with {:ok, hash_of_pubkey} <-
+      public_key
+      |>:binary.bin_to_list()
+      |>Enum.take(-64)
+      |>:binary.list_to_bin()
+      |>ExKeccak.hash_256()
+    do
+      address =
+        hash_of_pubkey
+        |>:binary.bin_to_list()
+        |>Enum.take(-20)
+        |>:binary.list_to_bin()
+      {:ok, address}
+    else
+      error ->
+        Logger.error("got error while generating address from public key: #{inspect(error)}")
+    end
+
+  end
+
+
 end
