@@ -67,6 +67,12 @@ defmodule Indexer.Transform.TokenTransfers do
         parse_larc1155_params(log)
       end
 
+    Logger.info(fn -> "dp-Token: #{inspect(token)}" end)
+    Logger.info(fn -> "dp-Token_Transfer: #{inspect(token_transfer)}" end)
+
+    Logger.info(fn -> "dp-Tokens: #{inspect(tokens)}" end)
+    Logger.info(fn -> "dp-Token_Transfers: #{inspect(token_transfers)}" end)
+
     %{
       tokens: [token | tokens],
       token_transfers: [token_transfer | token_transfers]
@@ -92,7 +98,6 @@ defmodule Indexer.Transform.TokenTransfers do
       to_address_hash: truncate_address_hash(log.third_topic),
       token_contract_address_hash: log.address_hash,
       transaction_hash: log.transaction_hash,
-      token_id: nil,
       token_type: "LARC-20"
     }
 
@@ -107,8 +112,16 @@ defmodule Indexer.Transform.TokenTransfers do
   # LARC-20 token transfer with topics as addresses
   defp parse_params(%{second_topic: nil, third_topic: nil, fourth_topic: nil, data: data} = log)
        when not is_nil(data) do
-    IO.inspect label: "...... second parse_params.... LARC-20"
+    Logger.info(fn -> "...... second parse_params.... LARC-20" end)
+
+    Logger.info(fn -> "data: #{inspect(data)}" end)
+    Logger.info(fn -> "transaction_hash: #{inspect(log.transaction_hash)}" end)
+
     [from_address_hash, to_address_hash, amount] = decode_data(data, [:address, :address, {:uint, 256}])
+
+    Logger.info(fn -> "from_address_hash: #{inspect(from_address_hash)}" end)
+    Logger.info(fn -> "to_address_hash: #{inspect(to_address_hash)}" end)
+    Logger.info(fn -> "amount: #{inspect(amount)}" end)
 
     token_transfer = %{
       amount: Decimal.new(amount || 0),
@@ -126,6 +139,9 @@ defmodule Indexer.Transform.TokenTransfers do
       contract_address_hash: log.address_hash,
       type: "LARC-20"
     }
+
+    Logger.info(fn -> "Token: #{inspect(token)}" end)
+    Logger.info(fn -> "Token_Transfer: #{inspect(token_transfer)}" end)
 
     {token, token_transfer}
   end
