@@ -1,6 +1,8 @@
 defmodule BlockScoutWeb.APIDocsView do
   use BlockScoutWeb, :view
 
+  import EthereumJsonrpc.Utilities
+
   alias BlockScoutWeb.LayoutView
 
   def action_tile_id(module, action) do
@@ -37,7 +39,8 @@ defmodule BlockScoutWeb.APIDocsView do
   def blockscout_url(set_path) when set_path == false do
     url_params = Application.get_env(:block_scout_web, BlockScoutWeb.Endpoint)[:url]
     host = url_params[:host]
-
+    print(url_params, "printing url_params")
+    print(host, "printing host")
     if host != "localhost" do
       LayoutView.get_url()
     else
