@@ -1,0 +1,53 @@
+2022-02-08T12:42:12.862 application=indexer fetcher=block_catchup first_block_number=750818 last_block_number=750809 [error] Unknown token transfer format: %{address_hash: "0x18b65ef042bf341371b71bded437087e42347e99", block_hash: "0x33d9fe
+3b50ed510a5b9e4eead362359120f2e9e0dd7e54b0527466f6f9c584bb", block_number: 750814, data: "0x0000000000000000000000000000000000000000000000000de0b6b3a7640000", first_topic: "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+", fourth_topic: nil, index: 0, second_topic: nil, third_topic: nil, transaction_hash: "0x934cbead6cf4b45ddee6daa47a589e4f6ff735cef5da2941e205cd1b150d6724"}
+2022-02-08T12:42:12.863 application=indexer fetcher=block_catchup first_block_number=750818 last_block_number=750809 [error] Unknown token transfer format: %{address_hash: "0x66674b56600a96ae1b560169a398f33439dff8af", block_hash: "0x33d9fe
+2022-02-08T11:27:06.691 application=explorer [warn] Failed to fetch genesis data. Chain spec path is not set.
+2022-02-08T12:54:18.181 application=explorer fetcher=block_catchup first_block_number=599808 last_block_number=599799 import_id=69084418 transaction_id=69085826 [error] Could not insert all of chunk into Elixir.Explorer.Chain.Transaction u
+ytes: <<24, 182, 94, 240, 66, 191, 52, 19, 113, 183, 27, 222, 212, 55, 8, 126, 66, 52, 126, 153>>}, updated_at: ~U[2022-02-08 12:54:18.032483Z], v: #Decimal<87>, value: #Explorer.Chain.Wei<0>}, %{block_hash: %Explorer.Chain.Hash{byte_count
+: 32, bytes: <<192, 25, 37, 110, 106, 58, 82, 55, 88, 48, 253, 123, 132, 43, 127, 214, 46, 116, 180, 75, 118, 239, 240, 176, 204, 100, 36, 78, 189, 27, 206, 173>>}, block_number: 599804, cumulative_gas_used: #Decimal<3000680>, from_address
+_hash: %Explorer.Chain.Hash{byte_count: 20, bytes: <<172, 57, 118, 221, 130, 183, 0, 201, 201, 44, 21, 99, 180, 203, 93, 7, 60, 222, 16, 118>>}, gas: #Decimal<100000000>, gas_price: #Explorer.Chain.Wei<5125>, gas_used: #Decimal<3000680>, h
+ash: %Explorer.Chain.Hash{byte_count: 32, bytes: <<196, 74, 10, 122, 22, 1, 18, 194, 45, 233, 17, 6, 23, 58, 212, 239, 248, 124, 42, 66, 38, 214, 252, 194, 160, 108, 65, 15, 11, 251, 188, 183>>}, index: 1, input: %Explorer.Chain.Data{bytes
+: <<53, 55, 211, 250, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 172, 57, 118, 221, 130, 183, 0, 201, 201, 44, 21, 99, 180, 203, 93, 7, 60, 222, 16, 118, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 86, 133, 216, 148, 187, 32, 46, 2, 94, 147, 35, 197, 144
+, 5, 145, 177, 197, 164, 94, 36>>}, inserted_at: ~U[2022-02-08 12:54:18.032483Z], nonce: 60, r: #Decimal<70065857820323495445154394913174742000530586113508690128818292108041054378551>, s: #Decimal<529662368942425651284025192722645097938662
+23004992070992628609494208117612872>, status: :error, to_address_hash: %Explorer.Chain.Hash{byte_count: 20, bytes: <<111, 4, 237, 221, 181, 194, 143, 203, 153, 11, 195, 7, 96, 54, 134, 66, 64, 99, 15, 126>>}, updated_at: ~U[2022-02-08 12:5
+4:18.032483Z], v: #Decimal<87>, value: #Explorer.Chain.Wei<0>}, %{block_hash: %Explorer.Chain.Hash{byte_count: 32, bytes: <<48, 245, 126, 29, 90, 112, 180, 185, 156, 77, 0, 200, 28, 116, 206, 250, 14, 173, 146, 27, 99, 194, 147, 75, 156, 8
+7, 112, 163, 159, 81, 71, 85>>}, block_number: 599801, cumulative_gas_used: #Decimal<3000680>, from_address_hash: %Explorer.Chain.Hash{byte_count: 20, bytes: <<172, 57, 118, 221, 130, 183, 0, 201, 201, 44, 21, 99, 180, 203, 93, 7, 60, 222,
+ 16, 118>>}, gas: #Decimal<100000000>, gas_price: #Explorer.Chain.Wei<5125>, gas_used: #Decimal<3000680>, hash: %Explorer.Chain.Hash{byte_count: 32, bytes: <<196, 74, 10, 122, 22, 1, 18, 194, 45, 233, 17, 6, 23, 58, 212, 239, 248, 124, 42,
+ 66, 38, 214, 252, 194, 160, 108, 65, 15, 11, 251, 188, 183>>}, index: 1, input: %Explorer.Chain.Data{bytes: <<53, 55, 211, 250, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 172, 57, 118, 221, 130, 183, 0, 201, 201, 44, 21, 99, 180, 203, 93, 7, 60,
+ 222, 16, 118, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 86, 133, 216, 148, 187, 32, 46, 2, 94, 147, 35, 197, 144, 5, 145, 177, 197, 164, 94, 36>>}, inserted_at: ~U[2022-02-08 12:54:18.032483Z], nonce: 60, r: #Decimal<700658578203234954451543949
+13174742000530586113508690128818292108041054378551>, s: #Decimal<52966236894242565128402519272264509793866223004992070992628609494208117612872>, status: :error, to_address_hash: %Explorer.Chain.Hash{byte_count: 20, bytes: <<111, 4, 237, 22
+1, 181, 194, 143, 203, 153, 11, 195, 7, 96, 54, 134, 66, 64, 99, 15, 126>>}, updated_at: ~U[2022-02-08 12:54:18.032483Z], v: #Decimal<87>, value: #Explorer.Chain.Wei<0>}, %{block_hash: %Explorer.Chain.Hash{byte_count: 32, bytes: <<184, 98,
+ 199, 140, 51, 42, 218, 47, 65, 36, 125, 102, 170, 232, 217, 143, 115, 199, 100, 178, 182, 46, 138, 253, 60, 51, 156, 10, 54, 19, 118, 196>>}, block_number: 599799, cumulative_gas_used: #Decimal<17543115>, from_address_hash: %Explorer.Chai
+n.Hash{byte_count: 20, bytes: <<254, 26, 122, 165, 73, 33, 86, 64, 145, 96, 233, 205, 86, 90, 207, 20, 244, 21, 118, 220>>}, gas: #Decimal<100000000000>, gas_price: #Explorer.Chain.Wei<1>, gas_used: #Decimal<17543115>, hash: %Explorer.Chai
+n.Hash{byte_count: 32, bytes: <<197, 127, 204, 177, 19, 175, 63, 118, 66, 228, 132, 121, 192, 243, 248, 127, 181, 70, 235, 219, 180, 177, 84, 91, 162, 254, 12, 108, 251, 137, 13, 144>>}, index: 0, input: %Explorer.Chain.Data{bytes: <<9, 94
+, 167, 179, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51, 62, 55, 34, 174, 167, 135, 0, 90, 99, 217, 89, 242, 213, 1, 54, 237, 154, 246, 203, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 30, 25, 224, 201, 186, 178, 64, 0,
+ 0>>}, inserted_at: ~U[2022-02-08 12:54:18.032483Z], nonce: 7926, r: #Decimal<90235942708771407198362715608184139407949855472257438000747550457778237293409>, s: #Decimal<521191489063490387631855528251823046984596589983619925542026082780509
+88727238>, status: :ok, to_address_hash: %Explorer.Chain.Hash{byte_count: 20, bytes: <<24, 182, 94, 240, 66, 191, 52, 19, 113, 183, 27, 222, 212, 55, 8, 126, 66, 52, 126, 153>>}, updated_at: ~U[2022-02-08 12:54:18.032483Z], v: #Decimal<87>
+, value: #Explorer.Chain.Wei<0>}]
+
+Options:
+
+[conflict_target: :hash, on_conflict: #Ecto.Query<from t0 in Explorer.Chain.Transaction, where: fragment("(EXCLUDED.block_hash, EXCLUDED.block_number, EXCLUDED.created_contract_address_hash, EXCLUDED.created_contract_code_indexed_at, EXCLU
+DED.cumulative_gas_used, EXCLUDED.cumulative_gas_used, EXCLUDED.from_address_hash, EXCLUDED.gas, EXCLUDED.gas_price, EXCLUDED.gas_used, EXCLUDED.index, EXCLUDED.input, EXCLUDED.nonce, EXCLUDED.r, EXCLUDED.s, EXCLUDED.status, EXCLUDED.to_ad
+dress_hash, EXCLUDED.v, EXCLUDED.value) IS DISTINCT FROM (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", t0.block_hash, t0.block_number, t0.created_contract_address_hash, t0.created_contract_code_indexed_at, t0.cumulative_gas_u
+sed, t0.cumulative_gas_used, t0.from_address_hash, t0.gas, t0.gas_price, t0.gas_used, t0.index, t0.input, t0.nonce, t0.r, t0.s, t0.status, t0.to_address_hash, t0.v, t0.value), update: [set: [block_hash: fragment("EXCLUDED.block_hash"), old
+_block_hash: t0.block_hash, block_number: fragment("EXCLUDED.block_number"), created_contract_address_hash: fragment("EXCLUDED.created_contract_address_hash"), created_contract_code_indexed_at: fragment("EXCLUDED.created_contract_code_inde
+xed_at"), cumulative_gas_used: fragment("EXCLUDED.cumulative_gas_used"), error: fragment("EXCLUDED.error"), from_address_hash: fragment("EXCLUDED.from_address_hash"), gas: fragment("EXCLUDED.gas"), gas_price: fragment("EXCLUDED.gas_price")
+, gas_used: fragment("EXCLUDED.gas_used"), index: fragment("EXCLUDED.index"), input: fragment("EXCLUDED.input"), nonce: fragment("EXCLUDED.nonce"), r: fragment("EXCLUDED.r"), s: fragment("EXCLUDED.s"), status: fragment("EXCLUDED.status"), 
+to_address_hash: fragment("EXCLUDED.to_address_hash"), v: fragment("EXCLUDED.v"), value: fragment("EXCLUDED.value"), inserted_at: fragment("LEAST(?, EXCLUDED.inserted_at)", t0.inserted_at), updated_at: fragment("GREATEST(?, EXCLUDED.update
+d_at)", t0.updated_at)]]>, returning: true, timeout: 60000, timestamps: %{inserted_at: ~U[2022-02-08 12:54:18.032483Z], updated_at: ~U[2022-02-08 12:54:18.032483Z]}]
+
+Exception:
+
+** (Postgrex.Error) ERROR 21000 (cardinality_violation) ON CONFLICT DO UPDATE command cannot affect row a second time
+
+    hint: Ensure that no rows proposed for insertion within the same command have duplicate constrained values.
+    (ecto_sql 3.5.3) lib/ecto/adapters/sql.ex:751: Ecto.Adapters.SQL.raise_sql_call_error/1
+    (ecto_sql 3.5.3) lib/ecto/adapters/sql.ex:660: Ecto.Adapters.SQL.insert_all/8
+    (ecto 3.5.5) lib/ecto/repo/schema.ex:54: Ecto.Repo.Schema.do_insert_all/6
+    (explorer 0.0.1) lib/explorer/repo.ex:45: anonymous fn/5 in Explorer.Repo.safe_insert_all/3
+    (elixir 1.11.4) lib/enum.ex:2193: Enum."-reduce/3-lists^foldl/2-0-"/3
+    (explorer 0.0.1) lib/explorer/chain/import.ex:299: Explorer.Chain.Import.insert_changes_list/3
+    (ecto 3.5.5) lib/ecto/multi.ex:646: Ecto.Multi.apply_operation/5
+    (elixir 1.11.4) lib/enum.ex:2193: Enum."-reduce/3-lists^foldl/2-0-"/3

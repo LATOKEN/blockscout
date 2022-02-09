@@ -37,14 +37,14 @@ defmodule BlockScoutWeb.Tokens.Helpers do
   end
 
   defp do_token_transfer_amount(%Token{type: "LARC-721"}, _amount, _amounts, _token_id, _token_ids) do
-    {:ok, :erc721_instance}
+    {:ok, :larc721_instance}
   end
 
   defp do_token_transfer_amount(%Token{type: "LARC-1155", decimals: decimals}, amount, amounts, _token_id, token_ids) do
     if amount do
-      {:ok, :erc1155_instance, CurrencyHelpers.format_according_to_decimals(amount, decimals)}
+      {:ok, :larc1155_instance, CurrencyHelpers.format_according_to_decimals(amount, decimals)}
     else
-      {:ok, :erc1155_instance, amounts, token_ids, decimals}
+      {:ok, :larc1155_instance, amounts, token_ids, decimals}
     end
   end
 
