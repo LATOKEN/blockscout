@@ -27,7 +27,7 @@ services:
     environment:
       - MIX_ENV=prod
       - COIN=LA
-      - ETHEREUM_JSONRPC_HTTP_URL=https://rpc-devnet.lachain.io
+      - ETHEREUM_JSONRPC_HTTP_URL=https://rpc-testnet.lachain.io
       - ETHEREUM_JSONRPC_VARIANT=ganache
       - DATABASE_URL=postgresql://blockscout:blockscout@blockscout-dev-postgresql:5432/blockscout?ssl=false
       - BLOCKSCOUT_HOST=postgres
