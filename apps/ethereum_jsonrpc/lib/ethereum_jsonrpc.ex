@@ -37,6 +37,7 @@ defmodule EthereumJSONRPC do
     RequestCoordinator,
     Subscription,
     Transport,
+    Validators,
     Variant
   }
 
@@ -336,6 +337,20 @@ defmodule EthereumJSONRPC do
       json_rpc_named_arguments
     )
   end
+
+  @doc """
+  fetches info of current validators.
+  """
+
+  def fetch_validators_public_key(json_rpc_named_arguments) do
+    Validators.fetch_pubkey(json_rpc_named_arguments)
+  end
+
+  def fetch_stake_of_validator(address, json_rpc_named_arguments) do
+    Validators.fetch_stake(address, json_rpc_named_arguments)
+  end
+
+
 
   @doc """
   Fetches pending transactions from variant API.

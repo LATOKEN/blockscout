@@ -876,7 +876,7 @@ defmodule Explorer.Chain do
         select:
           sum(
             fragment(
-              "CASE 
+              "CASE
                 WHEN ? = 0 THEN 0
                 WHEN ? < ? THEN ?
                 ELSE ? END",
@@ -2265,6 +2265,49 @@ defmodule Explorer.Chain do
     |> Repo.all()
   end
 
+
+  @doc """
+  Lists the validators.
+
+  """
+  @spec list_validators(List.t(), List.t()) :: [{Address.t(), non_neg_integer()}]
+  def list_validators(options \\ [], validators_address) do
+    paging_options = Keyword.get(options, :paging_options, @default_paging_options)
+    fetch_validators(paging_options, validators_address)
+  end
+
+
+
+  defp fetch_validators(paging_options, addresses) do
+    query_addresses = make_list_of_query_addresses(addresses)
+    base_query =
+      from(a in Address,
+        where: a.hash in ^query_addresses,
+        order_by: [desc: a.fetched_coin_balance, asc: a.hash],
+        preload: [:names],
+        select: {a, fragment("coalesce(1 + ?, 0)", a.nonce)}
+      )
+
+    base_query
+    |> page_addresses(paging_options)
+    |> limit(^paging_options.page_size)
+    |> Repo.all()
+
+  end
+
+  def make_list_of_query_addresses([]), do: []
+
+  def make_list_of_query_addresses([address | addresses]) do
+    [make_list_of_query_addresses(address) | make_list_of_query_addresses(addresses)]
+  end
+
+  def make_list_of_query_addresses(address) when not is_list(address) do
+    {:ok, query_address} = Chain.string_to_address_hash(address)
+    query_address
+  end
+
+
+
   @doc """
   Lists the top `t:Explorer.Chain.Token.t/0`'s'.
 
@@ -2940,7 +2983,7 @@ defmodule Explorer.Chain do
           right_join:
             missing_range in fragment(
               """
-                (SELECT b1.number 
+                (SELECT b1.number
                 FROM generate_series(0, (?)::integer) AS b1(number)
                 WHERE NOT EXISTS
                   (SELECT 1 FROM blocks b2 WHERE b2.number=b1.number AND b2.consensus))
@@ -3027,7 +3070,7 @@ defmodule Explorer.Chain do
         right_join:
           missing_range in fragment(
             """
-              (SELECT distinct b1.number 
+              (SELECT distinct b1.number
               FROM generate_series((?)::integer, (?)::integer) AS b1(number)
               WHERE NOT EXISTS
                 (SELECT 1 FROM blocks b2 WHERE b2.number=b1.number AND b2.consensus))
@@ -4023,7 +4066,7 @@ defmodule Explorer.Chain do
   Updates a `t:SmartContract.t/0`.
 
   Has the similar logic as create_smart_contract/1.
-  Used in cases when you need to update row in DB contains SmartContract, e.g. in case of changing 
+  Used in cases when you need to update row in DB contains SmartContract, e.g. in case of changing
   status `partially verified` to `fully verified` (re-verify).
   """
   @spec update_smart_contract(map()) :: {:ok, SmartContract.t()} | {:error, Ecto.Changeset.t()}
@@ -5066,7 +5109,7 @@ defmodule Explorer.Chain do
 
   # Fetches custom metadata for bridged tokens from the node.
   # Currently, gets Balancer token composite tokens with their weights
-  # from foreign chain 
+  # from foreign chain
   defp get_bridged_token_custom_metadata(foreign_token_address_hash, json_rpc_named_arguments, foreign_json_rpc)
        when not is_nil(foreign_json_rpc) and foreign_json_rpc !== "" do
     eth_call_foreign_json_rpc_named_arguments =

@@ -1,7 +1,7 @@
-require Logger
-
 defmodule BlockScoutWeb.AddressController do
   use BlockScoutWeb, :controller
+
+  require Logger
 
   import BlockScoutWeb.Chain, only: [paging_options: 1, next_page_params: 3, split_list_by_page: 1]
 
@@ -71,7 +71,7 @@ defmodule BlockScoutWeb.AddressController do
             exchange_rate: exchange_rate,
             total_supply: total_supply,
             tx_count: tx_count
-          ) 
+          )
         end
       end)
 

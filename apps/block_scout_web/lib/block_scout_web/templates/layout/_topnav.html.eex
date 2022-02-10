@@ -81,7 +81,7 @@
               </a>
               <div class="dropdown-menu" aria-labeledby="navbarTransactionsDropdown">
                 <%= link(
-                      gettext("LA"),
+                      gettext("All"),
                       class: "dropdown-item #{tab_status("tokens", @conn.request_path)}",
                       to: tokens_path(@conn, :index)
                     ) %>
@@ -97,9 +97,14 @@
                       to: bridged_tokens_path(@conn, :show, :bsc)
                     ) %>
                 <%= link(
-                      gettext("All"),
+                      gettext("LA"),
                       class: "dropdown-item #{tab_status("accounts", @conn.request_path)}",
                       to: address_path(@conn, :index)
+                    ) %>
+                <%= link(
+                      gettext("Validators"),
+                      class: "dropdown-item #{tab_status("staker", @conn.request_path)}",
+                      to: staker_path(@conn, :index)
                     ) %>
               </div>
             </li>
@@ -113,14 +118,19 @@
               </a>
               <div class="dropdown-menu" aria-labeledby="navbarTransactionsDropdown">
                 <%= link(
-                      gettext("LA"),
+                      gettext("All"),
                       class: "dropdown-item #{tab_status("tokens", @conn.request_path)}",
                       to: tokens_path(@conn, :index)
                     ) %>
                 <%= link(
-                      gettext("All"),
+                      gettext("LA"),
                       class: "dropdown-item #{tab_status("accounts", @conn.request_path)}",
                       to: address_path(@conn, :index)
+                    ) %>
+                <%= link(
+                      gettext("Validators"),
+                      class: "dropdown-item #{tab_status("staker", @conn.request_path)}",
+                      to: staker_path(@conn, :index)
                     ) %>
               </div>
             </li>
