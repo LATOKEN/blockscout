@@ -31,7 +31,7 @@ defmodule EthereumJSONRPC.Validators do
       request_to_get_stake(address, 0)
       |> json_rpc(json_rpc_named_arguments)
     do
-      stake = response["stake"]
+      stake = response["staking"]
       {:ok , stake}
     else
       {msg , response} ->
