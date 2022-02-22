@@ -64,6 +64,7 @@ defmodule BlockScoutWeb.AddressController do
       |> Enum.with_index(1)
       |> Enum.map(fn {{address, tx_count}, index} ->
         # if(Address.checksum(address.hash) not in addresses_to_hide) do
+          {staking, delegated_stake} = get_stake(address)
           View.render_to_string(
             AddressView,
             "_tile.html",
@@ -72,7 +73,8 @@ defmodule BlockScoutWeb.AddressController do
             exchange_rate: exchange_rate,
             total_supply: total_supply,
             tx_count: tx_count,
-            stake: get_stake(address)
+            staking: staking,
+            delegated_stake: delegated_stake
           )
         # end
       end)

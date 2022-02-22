@@ -28,14 +28,15 @@ defmodule EthereumJSONRPC.Validators do
 
   def fetch_stake(address, json_rpc_named_arguments) do
     with {:ok, response} <-
-      request_to_get_stake(address, 0)
-      |> json_rpc(json_rpc_named_arguments)
+            request_to_get_stake(address, 0)
+            |> json_rpc(json_rpc_named_arguments),
+          stake = response["staking"],
+          delegated_stake = response["staked"]
     do
-      stake = response["staking"]
-      {:ok , stake}
+      {:ok , %{staking: stake , delegated_stake: delegated_stake} }
     else
       {msg , response} ->
-        Logger.error("error fetching validators public key: #{msg}")
+        Logger.error("error fetching stake for address: #{msg}")
         {msg , response}
     end
   end

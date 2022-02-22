@@ -9,7 +9,10 @@
     <%= @address |> BlockScoutWeb.AddressView.address_partial_selector(nil, nil) |> BlockScoutWeb.RenderHelpers.render_partial() %>
   </td>
   <td class="stakes-td">
-    <span data-test="address_balance"><%= stake(@stake) %></span>
+    <span data-test="address_balance"><%= stake(@staking) %></span>
+  </td>
+  <td class="stakes-td">
+    <span data-test="address_balance"><%= stake(@delegated_stake) %></span>
   </td>
   <td class="stakes-td">
     <span data-test="address_balance"><%= balance(@address) %></span>

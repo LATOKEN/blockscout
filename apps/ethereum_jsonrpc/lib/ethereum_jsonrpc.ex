@@ -346,7 +346,7 @@ defmodule EthereumJSONRPC do
     Validators.fetch_pubkey(json_rpc_named_arguments)
   end
 
-  def fetch_stake_of_validator(address, json_rpc_named_arguments) do
+  def fetch_stake_of_address(address, json_rpc_named_arguments) do
     Validators.fetch_stake(address, json_rpc_named_arguments)
   end
 
