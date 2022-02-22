@@ -80,8 +80,6 @@ defmodule Indexer.Transform.TokenTransfers do
   # LARC-20 token transfer
   defp parse_params(%{second_topic: second_topic, third_topic: third_topic, fourth_topic: nil} = log)
        when not is_nil(second_topic) and not is_nil(third_topic) do
-    Logger.info(fn -> "...... first parse_params.... LARC-20" end)
-    Logger.info(fn -> "log: #{inspect(log)}" end)
     [amount] = decode_data(log.data, [{:uint, 256}])
 
     token_transfer = %{
@@ -105,34 +103,29 @@ defmodule Indexer.Transform.TokenTransfers do
   end
 
   # # LARC-20 token transfer with topics as addresses
-  # defp parse_params(%{second_topic: nil, third_topic: nil, fourth_topic: nil, data: data} = log)
-  #      when not is_nil(data) do
-  #   Logger.info(fn -> "...... second parse_params.... LARC-20" end)
-  #   Logger.info(fn -> "log: #{inspect(log)}" end)
-  #   [from_address_hash, to_address_hash, amount] = decode_data(data, [:address, :address, {:uint, 256}])
+  defp parse_params(%{second_topic: nil, third_topic: nil, fourth_topic: nil, data: data} = log)
+       when not is_nil(data) do
+    [from_address_hash, to_address_hash, amount] = decode_data(data, [:address, :address, {:uint, 256}])
 
-  #   token_transfer = %{
-  #     amount: Decimal.new(amount || 0),
-  #     block_number: log.block_number,
-  #     log_index: log.index,
-  #     block_hash: log.block_hash,
-  #     from_address_hash: encode_address_hash(from_address_hash),
-  #     to_address_hash: encode_address_hash(to_address_hash),
-  #     token_contract_address_hash: log.address_hash,
-  #     transaction_hash: log.transaction_hash,
-  #     token_type: "LARC-20"
-  #   }
+    token_transfer = %{
+      amount: Decimal.new(amount || 0),
+      block_number: log.block_number,
+      log_index: log.index,
+      block_hash: log.block_hash,
+      from_address_hash: encode_address_hash(from_address_hash),
+      to_address_hash: encode_address_hash(to_address_hash),
+      token_contract_address_hash: log.address_hash,
+      transaction_hash: log.transaction_hash,
+      token_type: "LARC-20"
+    }
 
-  #   token = %{
-  #     contract_address_hash: log.address_hash,
-  #     type: "LARC-20"
-  #   }
+    token = %{
+      contract_address_hash: log.address_hash,
+      type: "LARC-20"
+    }
 
-  #   #Logger.info(fn -> "Token: #{inspect(token)}" end)
-  #   #Logger.info(fn -> "Token_Transfer: #{inspect(token_transfer)}" end)
-
-  #   {token, token_transfer}
-  # end
+    {token, token_transfer}
+  end
 
   # LARC-721 token transfer with info in data field instead of in log topics
   defp parse_params(%{second_topic: second_topic, third_topic: third_topic, fourth_topic: fourth_topic} = log)
@@ -250,9 +243,9 @@ defmodule Indexer.Transform.TokenTransfers do
     "0x#{truncated_hash}"
   end
 
-  # defp encode_address_hash(binary) do
-  #   "0x" <> Base.encode16(binary, case: :lower)
-  # end
+  defp encode_address_hash(binary) do
+    "0x" <> Base.encode16(binary, case: :lower)
+  end
 
   defp decode_data("0x", types) do
     for _ <- types, do: nil
