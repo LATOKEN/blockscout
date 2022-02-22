@@ -3,6 +3,8 @@ defmodule BlockScoutWeb.AddressView do
 
   require Logger
 
+  import BlockScoutWeb.StakerView, only: [stake: 1]
+
   alias BlockScoutWeb.{AccessHelpers, LayoutView}
   alias Explorer.{Chain, CustomContractsHelpers}
   alias Explorer.Chain.{Address, Hash, InternalTransaction, SmartContract, Token, TokenTransfer, Transaction, Wei}

@@ -4,6 +4,7 @@ defmodule BlockScoutWeb.AddressController do
   require Logger
 
   import BlockScoutWeb.Chain, only: [paging_options: 1, next_page_params: 3, split_list_by_page: 1]
+  import BlockScoutWeb.StakerController, only: [get_stake: 1]
 
   alias BlockScoutWeb.{AccessHelpers, AddressView, Controller, CurrencyHelpers}
   alias Explorer.Counters.{AddressTokenTransfersCounter, AddressTransactionsCounter, AddressTransactionsGasUsageCounter}
@@ -70,7 +71,8 @@ defmodule BlockScoutWeb.AddressController do
             index: items_count + index,
             exchange_rate: exchange_rate,
             total_supply: total_supply,
-            tx_count: tx_count
+            tx_count: tx_count,
+            stake: get_stake(address)
           )
         # end
       end)
