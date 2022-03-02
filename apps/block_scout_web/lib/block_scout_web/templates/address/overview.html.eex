@@ -193,6 +193,20 @@
             </dt>
             <dd class="col-sm-8 col-md-8 col-lg-9" data-test="address_staking">
               <%= stake(@staking) %>
+              <%= if !match?({:pending, _}, @coin_balance_status) && !empty_exchange_rate?(@exchange_rate) do %>
+                <% usd_value = to_string(@exchange_rate.usd_value) %>
+                <span class="address-current-balance">
+                  (<span
+                    data-wei-value="<%= stake_to_wei(@staking).value %>"
+                    data-usd-exchange-rate="<%= @exchange_rate.usd_value %>"
+                    data-placement="top"
+                    data-toggle="tooltip"
+                    data-html="true"
+                    title='<%= "@ " <> usd_value <> "/" <> gettext("LA") %>'
+                  >
+                  </span>)
+                </span>
+              <% end %>
             </dd>
           </dl>
           <!-- Delegated Stake -->
@@ -204,6 +218,20 @@
             </dt>
             <dd class="col-sm-8 col-md-8 col-lg-9" data-test="address_delegated_stake">
               <%= stake(@delegated_stake) %>
+              <%= if !match?({:pending, _}, @coin_balance_status) && !empty_exchange_rate?(@exchange_rate) do %>
+                <% usd_value = to_string(@exchange_rate.usd_value) %>
+                <span class="address-current-balance">
+                  (<span
+                    data-wei-value="<%= stake_to_wei(@delegated_stake).value %>"
+                    data-usd-exchange-rate="<%= @exchange_rate.usd_value %>"
+                    data-placement="top"
+                    data-toggle="tooltip"
+                    data-html="true"
+                    title='<%= "@ " <> usd_value <> "/" <> gettext("LA") %>'
+                  >
+                  </span>)
+                </span>
+              <% end %>
             </dd>
           </dl>
           <!-- Tokens -->

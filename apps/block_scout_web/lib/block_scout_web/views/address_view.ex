@@ -3,8 +3,6 @@ defmodule BlockScoutWeb.AddressView do
 
   require Logger
 
-  import BlockScoutWeb.StakerView, only: [stake: 1]
-
   alias BlockScoutWeb.{AccessHelpers, LayoutView}
   alias Explorer.{Chain, CustomContractsHelpers}
   alias Explorer.Chain.{Address, Hash, InternalTransaction, SmartContract, Token, TokenTransfer, Transaction, Wei}
@@ -449,4 +447,19 @@ defmodule BlockScoutWeb.AddressView do
     address_hash_str = "0x" <> Base.encode16(address_hash.bytes, case: :lower)
     String.downcase(System.get_env("AMB_BRIDGE_MEDIATORS", "")) =~ address_hash_str
   end
+
+  # stake is in string
+  def stake(stake) do
+    format_wei_value(stake_to_wei(stake), :ether)
+  end
+
+  def stake_to_wei(stake) do
+
+    multiplier = Decimal.new("1000000000000000000")
+    stake_decimal = Decimal.mult(Decimal.new(stake) , multiplier)
+    {:ok, stake_wei} = Wei.cast(stake_decimal)
+    stake_wei
+
+  end
+
 end
