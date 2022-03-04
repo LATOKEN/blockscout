@@ -1,6 +1,8 @@
 defmodule BlockScoutWeb.AddressDecompiledContractController do
   use BlockScoutWeb, :controller
 
+  import BlockScoutWeb.StakerController, only: [get_stake: 1]
+
   alias BlockScoutWeb.AccessHelpers
   alias Explorer.{Chain, Market}
   alias Explorer.ExchangeRates.Token
@@ -10,13 +12,16 @@ defmodule BlockScoutWeb.AddressDecompiledContractController do
     with {:ok, address_hash} <- Chain.string_to_address_hash(address_hash_string),
          {:ok, address} <- Chain.find_decompiled_contract_address(address_hash),
          {:ok, false} <- AccessHelpers.restricted_access?(address_hash_string, params) do
+      {staking, delegated_stake} = get_stake(address)
       render(
         conn,
         "index.html",
         address: address,
         coin_balance_status: CoinBalanceOnDemand.trigger_fetch(address),
         exchange_rate: Market.get_exchange_rate(Explorer.coin()) || Token.null(),
-        counters_path: address_path(conn, :address_counters, %{"id" => address_hash_string})
+        counters_path: address_path(conn, :address_counters, %{"id" => address_hash_string}),
+        staking: staking,
+        delegated_stake: delegated_stake
       )
     else
       {:restricted_access, _} ->

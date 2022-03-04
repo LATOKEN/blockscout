@@ -10,6 +10,7 @@ defmodule BlockScoutWeb.AddressTokenTransferController do
 
   import BlockScoutWeb.Chain,
     only: [current_filter: 1, next_page_params: 3, paging_options: 1, split_list_by_page: 1]
+  import BlockScoutWeb.StakerController, only: [get_stake: 1]
 
   @transaction_necessity_by_association [
     necessity_by_association: %{
@@ -98,6 +99,7 @@ defmodule BlockScoutWeb.AddressTokenTransferController do
          {:ok, address} <- Chain.hash_to_address(address_hash),
          {:ok, token} <- Chain.token_from_address_hash(token_hash),
          {:ok, false} <- AccessHelpers.restricted_access?(address_hash_string, params) do
+      {staking, delegated_stake} = get_stake(address)
       render(
         conn,
         "index.html",
@@ -106,7 +108,9 @@ defmodule BlockScoutWeb.AddressTokenTransferController do
         exchange_rate: Market.get_exchange_rate(Explorer.coin()) || Token.null(),
         current_path: Controller.current_full_path(conn),
         token: token,
-        counters_path: address_path(conn, :address_counters, %{"id" => Address.checksum(address_hash)})
+        counters_path: address_path(conn, :address_counters, %{"id" => Address.checksum(address_hash)}),
+        staking: staking,
+        delegated_stake: delegated_stake
       )
     else
       {:restricted_access, _} ->
@@ -189,6 +193,7 @@ defmodule BlockScoutWeb.AddressTokenTransferController do
     with {:ok, address_hash} <- Chain.string_to_address_hash(address_hash_string),
          {:ok, address} <- Chain.hash_to_address(address_hash),
          {:ok, false} <- AccessHelpers.restricted_access?(address_hash_string, params) do
+      {staking, delegated_stake} = get_stake(address)
       render(
         conn,
         "index.html",
@@ -197,7 +202,9 @@ defmodule BlockScoutWeb.AddressTokenTransferController do
         exchange_rate: Market.get_exchange_rate(Explorer.coin()) || Token.null(),
         filter: params["filter"],
         current_path: Controller.current_full_path(conn),
-        counters_path: address_path(conn, :address_counters, %{"id" => Address.checksum(address_hash)})
+        counters_path: address_path(conn, :address_counters, %{"id" => Address.checksum(address_hash)}),
+        staking: staking,
+        delegated_stake: delegated_stake
       )
     else
       {:restricted_access, _} ->

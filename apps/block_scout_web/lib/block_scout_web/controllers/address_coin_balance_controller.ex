@@ -6,6 +6,7 @@ defmodule BlockScoutWeb.AddressCoinBalanceController do
   use BlockScoutWeb, :controller
 
   import BlockScoutWeb.Chain, only: [paging_options: 1, next_page_params: 3, split_list_by_page: 1]
+  import BlockScoutWeb.StakerController, only: [get_stake: 1]
 
   alias BlockScoutWeb.{AccessHelpers, AddressCoinBalanceView, Controller}
   alias Explorer.{Chain, Market}
@@ -65,12 +66,15 @@ defmodule BlockScoutWeb.AddressCoinBalanceController do
     with {:ok, address_hash} <- Chain.string_to_address_hash(address_hash_string),
          {:ok, address} <- Chain.hash_to_address(address_hash),
          {:ok, false} <- AccessHelpers.restricted_access?(address_hash_string, params) do
+      {staking, delegated_stake} = get_stake(address)
       render(conn, "index.html",
         address: address,
         coin_balance_status: CoinBalanceOnDemand.trigger_fetch(address),
         exchange_rate: Market.get_exchange_rate(Explorer.coin()) || Token.null(),
         current_path: Controller.current_full_path(conn),
-        counters_path: address_path(conn, :address_counters, %{"id" => Address.checksum(address_hash)})
+        counters_path: address_path(conn, :address_counters, %{"id" => Address.checksum(address_hash)}),
+        staking: staking,
+        delegated_stake: delegated_stake
       )
     else
       {:restricted_access, _} ->

@@ -8,6 +8,8 @@
 defmodule BlockScoutWeb.AddressWriteContractController do
   use BlockScoutWeb, :controller
 
+  import BlockScoutWeb.StakerController, only: [get_stake: 1]
+
   alias BlockScoutWeb.AccessHelpers
   alias Explorer.{Chain, Market}
   alias Explorer.Chain.Address
@@ -29,6 +31,7 @@ defmodule BlockScoutWeb.AddressWriteContractController do
          {:ok, address} <- Chain.find_contract_address(address_hash, address_options, true),
          false <- is_nil(address.smart_contract),
          {:ok, false} <- AccessHelpers.restricted_access?(address_hash_string, params) do
+      {staking, delegated_stake} = get_stake(address)
       render(
         conn,
         "index.html",
@@ -37,7 +40,9 @@ defmodule BlockScoutWeb.AddressWriteContractController do
         action: :write,
         coin_balance_status: CoinBalanceOnDemand.trigger_fetch(address),
         exchange_rate: Market.get_exchange_rate(Explorer.coin()) || Token.null(),
-        counters_path: address_path(conn, :address_counters, %{"id" => Address.checksum(address_hash)})
+        counters_path: address_path(conn, :address_counters, %{"id" => Address.checksum(address_hash)}),
+        staking: staking,
+        delegated_stake: delegated_stake
       )
     else
       _ ->

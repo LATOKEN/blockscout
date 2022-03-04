@@ -6,6 +6,7 @@ defmodule BlockScoutWeb.AddressInternalTransactionController do
   use BlockScoutWeb, :controller
 
   import BlockScoutWeb.Chain, only: [current_filter: 1, paging_options: 1, next_page_params: 3, split_list_by_page: 1]
+  import BlockScoutWeb.StakerController, only: [get_stake: 1]
 
   alias BlockScoutWeb.{AccessHelpers, Controller, InternalTransactionView}
   alias Explorer.{Chain, Market}
@@ -67,6 +68,7 @@ defmodule BlockScoutWeb.AddressInternalTransactionController do
     with {:ok, address_hash} <- Chain.string_to_address_hash(address_hash_string),
          {:ok, address} <- Chain.hash_to_address(address_hash),
          {:ok, false} <- AccessHelpers.restricted_access?(address_hash_string, params) do
+      {staking, delegated_stake} = get_stake(address)
       render(
         conn,
         "index.html",
@@ -75,7 +77,9 @@ defmodule BlockScoutWeb.AddressInternalTransactionController do
         current_path: Controller.current_full_path(conn),
         exchange_rate: Market.get_exchange_rate(Explorer.coin()) || Token.null(),
         filter: params["filter"],
-        counters_path: address_path(conn, :address_counters, %{"id" => address_hash_string})
+        counters_path: address_path(conn, :address_counters, %{"id" => address_hash_string}),
+        staking: staking,
+        delegated_stake: delegated_stake
       )
     else
       {:restricted_access, _} ->
