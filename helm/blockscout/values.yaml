@@ -67,6 +67,8 @@ configmap:
 
 postgresql:
   enabled: true
+  image:
+    tag: '14'
   persistence:
     enabled: true
     accessMode: ReadWriteOnce
