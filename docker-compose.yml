@@ -2,7 +2,7 @@ version: '2.4'
 services:
   postgresql:
     container_name: blockscout-dev-postgresql
-    image: postgres:12.5
+    image: postgres:10.10
     restart: always
     ports:
       - 5432:5432
