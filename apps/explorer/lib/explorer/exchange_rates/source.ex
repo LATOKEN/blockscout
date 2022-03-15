@@ -2,6 +2,8 @@ defmodule Explorer.ExchangeRates.Source do
   @moduledoc """
   Behaviour for fetching exchange rates from external sources.
   """
+  require Logger
+
   alias Explorer.ExchangeRates.{Source, Token}
   alias HTTPoison.{Error, Response}
 
@@ -10,19 +12,22 @@ defmodule Explorer.ExchangeRates.Source do
   """
   @spec fetch_exchange_rates(module) :: {:ok, [Token.t()]} | {:error, any}
   def fetch_exchange_rates(source \\ exchange_rates_source()) do
-    source_url = source.source_url()
-    fetch_exchange_rates_request(source, source_url)
+    # source_url = source.source_url()
+    fetch_exchange_rates_request(source, "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?symbol=LA")
+    # fetch_exchange_rates_request(source, source_url)
   end
 
   @spec fetch_exchange_rates_for_token(String.t()) :: {:ok, [Token.t()]} | {:error, any}
   def fetch_exchange_rates_for_token(symbol) do
     source_url = Source.CoinGecko.source_url(symbol)
+    Logger.info(fn -> "24. #{inspect(source_url)}" end)
     fetch_exchange_rates_request(Source.CoinGecko, source_url)
   end
 
   @spec fetch_exchange_rates_for_token_address(String.t()) :: {:ok, [Token.t()]} | {:error, any}
   def fetch_exchange_rates_for_token_address(address_hash) do
     source_url = Source.CoinGecko.source_url(address_hash)
+    Logger.info(fn -> "31. #{inspect(source_url)}" end)
     fetch_exchange_rates_request(Source.CoinGecko, source_url)
   end
 
@@ -59,7 +64,11 @@ defmodule Explorer.ExchangeRates.Source do
   @callback source_url(String.t()) :: String.t() | :ignore
 
   def headers do
-    [{"Content-Type", "application/json"}]
+    # [{"Content-Type", "application/json"}]
+    [
+      {"Content-Type", "application/json"},
+      {"X-CMC_PRO_API_KEY", "8365e154-5a44-49ae-847f-6cd1c93cb8e7"}
+    ]
   end
 
   def decode_json(data) do
