@@ -206,13 +206,19 @@ defmodule Explorer.Token.InstanceMetadataRetriever do
   end
 
   defp fetch_metadata(uri) do
-    resp = HTTPoison.get!(uri)
+    newUri = if String.contains?(uri, "gateway.pinata.cloud") do
+      String.replace(uri, "gateway.pinata.cloud", "latoken.mypinata.cloud")
+    else
+      uri
+    end
+
+    resp = HTTPoison.get!(newUri)
     if resp.status_code == 200 do
       {:ok, json} = decode_json(resp.body)
       if Map.has_key?(json, "image") do
         check_type(json)
       else
-        newJson = Map.put(json, :image, json["url"])
+        newJson = Map.put(json, "image", json["url"])
         check_type(newJson)
       end
     end
@@ -229,7 +235,14 @@ defmodule Explorer.Token.InstanceMetadataRetriever do
   end
 
   defp check_type(json) when is_map(json) do
-    {:ok, %{metadata: json}}
+    if String.contains?(json["image"], "gateway.pinata.cloud") do
+      newUri = String.replace(json["image"], "gateway.pinata.cloud", "latoken.mypinata.cloud")
+      json = Map.put(json, "image", newUri)
+
+      {:ok, %{metadata: json}}
+    else
+      {:ok, %{metadata: json}}
+    end
   end
 
   defp check_type(_) do
