@@ -78,5 +78,7 @@ postgresql:
   postgresqlPassword: blockscout
   postgresqlDatabase: blockscout
   postgresqlPostgresPassword: blockscout
+  postgresqlExtendedConf:
+    maxConnections: 1024
   metrics:
     enabled: false
