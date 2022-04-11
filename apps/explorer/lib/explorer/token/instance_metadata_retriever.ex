@@ -6,9 +6,10 @@ defmodule Explorer.Token.InstanceMetadataRetriever do
   require Logger
 
   alias Explorer.SmartContract.Reader
-  alias HTTPoison.{Error, Response}
+  # alias HTTPoison.{Response}
 
   @token_uri "c87b56dd"
+  # @token_uri "4a8a11c7"
 
   @abi [
     %{
@@ -19,6 +20,7 @@ defmodule Explorer.Token.InstanceMetadataRetriever do
         %{"type" => "string", "name" => ""}
       ],
       "name" => "tokenURI",
+      # "name" => "storageTokenURI",
       "inputs" => [
         %{
           "type" => "uint256",
@@ -204,36 +206,22 @@ defmodule Explorer.Token.InstanceMetadataRetriever do
   end
 
   defp fetch_metadata(uri) do
-    case HTTPoison.get(uri) do
-      {:ok, %Response{body: body, status_code: 200, headers: headers}} ->
-        if Enum.member?(headers, {"Content-Type", "image/png"}) do
-          json = %{"image" => uri}
-
-          check_type(json)
-        else
-          {:ok, json} = decode_json(body)
-
-          check_type(json)
-        end
-
-      {:ok, %Response{body: body, status_code: 301}} ->
-        {:ok, json} = decode_json(body)
-
-        check_type(json)
-
-      {:ok, %Response{body: body}} ->
-        {:error, body}
-
-      {:error, %Error{reason: reason}} ->
-        {:error, reason}
+    newUri = if String.contains?(uri, "gateway.pinata.cloud") do
+      String.replace(uri, "gateway.pinata.cloud", "latoken.mypinata.cloud")
+    else
+      uri
     end
-  rescue
-    e ->
-      Logger.debug(["Could not send request to token uri #{inspect(uri)}. error #{inspect(e)}"],
-        fetcher: :token_instances
-      )
 
-      {:error, :request_error}
+    resp = HTTPoison.get!(newUri)
+    if resp.status_code == 200 do
+      {:ok, json} = decode_json(resp.body)
+      if Map.has_key?(json, "image") do
+        check_type(json)
+      else
+        newJson = Map.put(json, "image", json["url"])
+        check_type(newJson)
+      end
+    end
   end
 
   defp decode_json(body) do
@@ -247,7 +235,14 @@ defmodule Explorer.Token.InstanceMetadataRetriever do
   end
 
   defp check_type(json) when is_map(json) do
-    {:ok, %{metadata: json}}
+    if String.contains?(json["image"], "gateway.pinata.cloud") do
+      newUri = String.replace(json["image"], "gateway.pinata.cloud", "latoken.mypinata.cloud")
+      json = Map.put(json, "image", newUri)
+
+      {:ok, %{metadata: json}}
+    else
+      {:ok, %{metadata: json}}
+    end
   end
 
   defp check_type(_) do

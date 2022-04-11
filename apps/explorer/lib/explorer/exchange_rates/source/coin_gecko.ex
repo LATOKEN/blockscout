@@ -6,6 +6,8 @@ defmodule Explorer.ExchangeRates.Source.CoinGecko do
   alias Explorer.Chain
   alias Explorer.ExchangeRates.{Source, Token}
 
+  require Logger
+
   import Source, only: [to_decimal: 1]
 
   @behaviour Source
@@ -42,6 +44,38 @@ defmodule Explorer.ExchangeRates.Source.CoinGecko do
   end
 
   @impl Source
+  def format_data(%{"data" => _} = json_data) do
+    market_data = json_data["data"]
+    la_data = List.first(market_data["LA"])
+
+    last_updated = get_last_updated(la_data)
+    current_price = get_current_la_price(la_data)
+
+    id = la_data["slug"]
+    btc_value = get_btc_value(id, la_data)
+
+    circulating_supply_data = la_data && la_data["circulating_supply"]
+    total_supply_data = la_data && la_data["total_supply"]
+    market_cap_data_usd = la_data && la_data["quote"] && la_data["quote"]["USD"] && la_data["quote"]["USD"]["market_cap"]
+    total_volume_data_usd = la_data && la_data["quote"] && la_data["quote"]["USD"] && la_data["quote"]["USD"]["volume_24h"]
+
+    [
+      %Token{
+        available_supply: to_decimal(circulating_supply_data),
+        total_supply: to_decimal(total_supply_data) || to_decimal(circulating_supply_data),
+        btc_value: btc_value,
+        id: id,
+        last_updated: last_updated,
+        market_cap_usd: to_decimal(market_cap_data_usd),
+        name: la_data["name"],
+        symbol: String.upcase(la_data["symbol"]),
+        usd_value: current_price,
+        volume_24h_usd: to_decimal(total_volume_data_usd)
+      }
+    ]
+  end
+
+  @impl Source
   def format_data(_), do: []
 
   defp get_last_updated(market_data) do
@@ -58,6 +92,14 @@ defmodule Explorer.ExchangeRates.Source.CoinGecko do
   defp get_current_price(market_data) do
     if market_data["current_price"] do
       to_decimal(market_data["current_price"]["usd"])
+    else
+      1
+    end
+  end
+
+  defp get_current_la_price(market_data) do
+    if market_data["quote"] && market_data["quote"]["USD"] do
+      to_decimal(market_data["quote"]["USD"]["price"])
     else
       1
     end
@@ -142,7 +184,6 @@ defmodule Explorer.ExchangeRates.Source.CoinGecko do
       url = "#{base_url()}/coins/list"
 
       symbol_downcase = String.downcase(symbol)
-
       case Source.http_request(url) do
         {:ok, data} = resp ->
           if is_list(data) do
