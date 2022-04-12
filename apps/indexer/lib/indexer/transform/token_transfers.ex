@@ -130,8 +130,6 @@ defmodule Indexer.Transform.TokenTransfers do
   # LARC-721 token transfer with info in data field instead of in log topics
   defp parse_params(%{second_topic: second_topic, third_topic: third_topic, fourth_topic: fourth_topic} = log)
        when not is_nil(second_topic) and not is_nil(third_topic) and not is_nil(fourth_topic) do
-    Logger.info(fn -> "...... third parse_params.... LARC-721" end)
-    Logger.info(fn -> "log: #{inspect(log)}" end)
     [token_id] = decode_data(fourth_topic, [{:uint, 256}])
 
     token_transfer = %{
@@ -151,8 +149,6 @@ defmodule Indexer.Transform.TokenTransfers do
       type: "LARC-721"
     }
 
-    Logger.info(fn -> "Token: #{inspect(token)}" end)
-    Logger.info(fn -> "Token_Transfer: #{inspect(token_transfer)}" end)
 
     {token, token_transfer}
   end
