@@ -91,6 +91,7 @@ defmodule Indexer.Transform.TokenTransfers do
       to_address_hash: truncate_address_hash(log.third_topic),
       token_contract_address_hash: log.address_hash,
       transaction_hash: log.transaction_hash,
+      token_id: nil,
       token_type: "LARC-20"
     }
 
@@ -102,7 +103,7 @@ defmodule Indexer.Transform.TokenTransfers do
     {token, token_transfer}
   end
 
-  # # LARC-20 token transfer with topics as addresses
+  # LARC-20 token transfer with topics as addresses
   defp parse_params(%{second_topic: nil, third_topic: nil, fourth_topic: nil, data: data} = log)
        when not is_nil(data) do
     [from_address_hash, to_address_hash, amount] = decode_data(data, [:address, :address, {:uint, 256}])
@@ -116,6 +117,7 @@ defmodule Indexer.Transform.TokenTransfers do
       to_address_hash: encode_address_hash(to_address_hash),
       token_contract_address_hash: log.address_hash,
       transaction_hash: log.transaction_hash,
+      token_id: nil,
       token_type: "LARC-20"
     }
 
