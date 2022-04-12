@@ -3,6 +3,7 @@ services:
   postgresql:
     container_name: blockscout-dev-postgresql
     image: postgres:10.10
+    command: postgres -c 'max_connections=1024'
     restart: always
     ports:
       - 5432:5432
