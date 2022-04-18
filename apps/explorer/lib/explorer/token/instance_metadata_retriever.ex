@@ -222,6 +222,23 @@ defmodule Explorer.Token.InstanceMetadataRetriever do
         check_type(newJson)
       end
     end
+
+    rescue
+      e ->
+        Logger.debug(["Could not send request to token uri #{inspect(uri)}. error #{inspect(e)}"],
+          fetcher: :token_instances
+        )
+        newUri = if String.contains?(uri, "gateway.pinata.cloud") do
+          String.replace(uri, "gateway.pinata.cloud", "latoken.mypinata.cloud")
+        else
+          uri
+        end
+        Logger.debug(["Could not send request to new token uri #{inspect(newUri)}. error #{inspect(e)}"],
+          fetcher: :token_instances
+        )
+
+        {:error, :request_error}
+
   end
 
   defp decode_json(body) do
