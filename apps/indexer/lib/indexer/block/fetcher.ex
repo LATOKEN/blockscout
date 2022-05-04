@@ -118,7 +118,7 @@ defmodule Indexer.Block.Fetcher do
           callback_module: callback_module,
           json_rpc_named_arguments: json_rpc_named_arguments
         } = state,
-        _.._ = range
+        _..last = range
       )
       when callback_module != nil do
     with {:blocks,
@@ -164,7 +164,8 @@ defmodule Indexer.Block.Fetcher do
            beneficiary_params_set
            |> add_gas_payments(transactions_with_receipts, blocks)
            |> BlockReward.reduce_uncle_rewards(),
-         address_token_balances = AddressTokenBalances.params_set(%{token_transfers_params: token_transfers}),
+         address_token_balances_for_token_transfer = AddressTokenBalances.params_set(%{token_transfers_params: token_transfers}),
+         address_token_balances = MapSet.union(address_token_balances_for_token_transfer, AddressTokenBalances.update_all_address(%{tokens_params: tokens}, last)),
          {:ok, inserted} <-
            __MODULE__.import(
              state,
