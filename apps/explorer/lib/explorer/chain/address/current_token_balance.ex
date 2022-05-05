@@ -8,7 +8,6 @@ defmodule Explorer.Chain.Address.CurrentTokenBalance do
 
   use Explorer.Schema
 
-  #import EthereumJSONRPC.Utilities, only: [print: 2]
   import Ecto.Changeset
   import Ecto.Query, only: [from: 2, limit: 2, offset: 2, order_by: 3, preload: 2]
 
@@ -270,10 +269,7 @@ defmodule Explorer.Chain.Address.CurrentTokenBalance do
   def get_address_hex(%__MODULE__{
     address_hash: address
   }) do
-    #print(address, "printing address in CurrentTokenBalance")
-    res = Address.checksum(address)
-    #print(res, "printing hex address in CurrentTokenBalance")
-    res
+    Address.checksum(address)
   end
 
 end

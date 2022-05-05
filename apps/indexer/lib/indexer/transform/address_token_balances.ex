@@ -5,16 +5,12 @@ defmodule Indexer.Transform.AddressTokenBalances do
 
   require Logger
 
-  #import EthereumJSONRPC.Utilities, only: [print: 2]
-
   alias Explorer.Chain
   alias Explorer.Chain.Address.CurrentTokenBalance
 
   @burn_address "0x0000000000000000000000000000000000000000"
 
   @tokens_to_update_all_address [
-    #"0x0000000000000000000000000000000000000001", #testing
-    #"0xd83faf5c2ae5e1f96e104cc94ee1919bcbf25c46", # testing
     "0xaba0bb586335b938a7a817a900017d891268d32c", # xWeowns in mainnet
     "0x82779f184af990b7808f1559e48db8fd114ab347", # xWeowns in testnet
     "0x5ce3d12a629414fe9b02b61e01bab92fe20c482a", # xWeowns in testnet
@@ -25,12 +21,10 @@ defmodule Indexer.Transform.AddressTokenBalances do
 
   def update_all_address(%{tokens_params: tokens}, block_number) do
     tokens_to_update = Enum.filter(tokens, &filter_necessary_tokens/1)
-    #print(tokens_to_update, "got filtered tokens")
     if tokens_to_update == [] do
       MapSet.new()
     else
       tokens_with_block_number = put_block_number(tokens_to_update, block_number)
-      #print(tokens_with_block_number, "filtered tokens with block number")
       get_all_address(tokens_with_block_number, MapSet.new())
     end
   end
@@ -42,14 +36,11 @@ defmodule Indexer.Transform.AddressTokenBalances do
   end
 
   def filter_necessary_tokens(%{contract_address_hash: contract_address_hash}) do
-    res =
     if (contract_address_hash not in @tokens_to_update_all_address) do
       false
     else
       true
     end
-    #print({contract_address_hash, res}, "filtering token")
-    res
   end
 
   def filter_necessary_tokens(_token) do
@@ -61,13 +52,8 @@ defmodule Indexer.Transform.AddressTokenBalances do
       contract_address_hash: contract_address_hash,
     } = token | tokens ], result) when is_list(tokens) do
 
-      #print(contract_address_hash, "printing token address in hex")
       with {:ok, token_address} <- Chain.string_to_address_hash(contract_address_hash) do
-        #print(token_address, "printing token address in Address format")
         addresses = Chain.fetch_token_holders_from_token_hash(token_address, false)
-        #print(token, "printing token")
-        #print(addresses, "printing addresses for token")
-        #print(result, "printing result")
         result = update_each_address(addresses, token, result)
         get_all_address(tokens, result)
       else
@@ -87,7 +73,6 @@ defmodule Indexer.Transform.AddressTokenBalances do
     } = token,
     result) do
       address_hash = CurrentTokenBalance.get_address_hex(address)
-      #print({contract_address_hash, address_hash}, "printing addresses for token")
       result = add_token_balance_address(result, address_hash, contract_address_hash, nil, token_type, block_number)
       update_each_address(addresses, token, result)
   end
