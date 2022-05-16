@@ -26,6 +26,7 @@
       </a>
     </div>
   </div>
+<!-- removing recaptcha
   <script type="text/javascript">
     var widgetId1
     var onloadCallback = function() {
@@ -37,5 +38,6 @@
   </script>
   <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer>
   </script>
+-->
   <script defer data-cfasync="false" src="<%= static_path(@conn, "/js/datepicker.js") %>"></script>
 </section>

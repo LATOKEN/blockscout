@@ -28,6 +28,11 @@ const _instance2 = new Pikaday({
 
 $button.on('click', () => {
   $button.addClass('spinner')
+
+  location.href = $button.data('link')
+  $button.removeClass('spinner')
+
+  /* removing recaptcha
   // eslint-disable-next-line
   const resp = grecaptcha.getResponse()
   if (resp) {
@@ -60,6 +65,7 @@ $button.on('click', () => {
   } else {
     $button.removeClass('spinner')
   }
+  */
 })
 
 function onSelect (date, paramToReplace) {
