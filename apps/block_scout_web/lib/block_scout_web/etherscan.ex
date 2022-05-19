@@ -322,6 +322,37 @@ defmodule BlockScoutWeb.Etherscan do
     ]
   }
 
+  @token_tokenlist_example_value %{
+    "status" => "1",
+    "message" => "OK",
+    "result" => [
+      %{
+        "cataloged" => true,
+        "contractAddress" => "0x0000000000000000000000000000000000000000",
+        "decimals" => "18",
+        "name" => "Example Token 1",
+        "symbol" => "ET1",
+        "totalSupply" => "1000000000",
+        "type" => "LARC-20"
+      },
+      %{
+        "cataloged" => true,
+        "contractAddress" => "0x0000000000000000000000000000000000000001",
+        "decimals" => "18",
+        "name" => "Example Token 2",
+        "symbol" => "ET2",
+        "totalSupply" => "1000000001",
+        "type" => "LARC-20"
+      }
+    ]
+  }
+
+  @token_tokenlist_example_value_error %{
+    "status" => "0",
+    "message" => "Cannot fetch token list",
+    "result" => nil
+  }
+
   @stats_tokensupply_example_value %{
     "status" => "1",
     "message" => "OK",
@@ -2093,6 +2124,37 @@ defmodule BlockScoutWeb.Etherscan do
     ]
   }
 
+  @token_tokenlist_action %{
+    name: "tokenList",
+    description:
+      "Get all available tokens",
+    required_params: [],
+    optional_params: [],
+    responses: [
+      %{
+        code: "200",
+        description: "successful operation",
+        example_value: Jason.encode!(@token_tokenlist_example_value),
+        model: %{
+          name: "Result",
+          fields: %{
+            status: @status_type,
+            message: @message_type,
+            result: %{
+              type: "array",
+              array_type: @token_model
+            }
+          }
+        }
+      },
+      %{
+        code: "200",
+        description: "error",
+        example_value: Jason.encode!(@token_tokenlist_example_value_error)
+      }
+    ]
+  }
+
   @stats_tokensupply_action %{
     name: "tokensupply",
     description:
@@ -3022,7 +3084,8 @@ defmodule BlockScoutWeb.Etherscan do
     actions: [
       @token_gettoken_action,
       @token_gettokenholders_action,
-      @token_bridgedtokenlist_action
+      @token_bridgedtokenlist_action,
+      @token_tokenlist_action
     ]
   }
 

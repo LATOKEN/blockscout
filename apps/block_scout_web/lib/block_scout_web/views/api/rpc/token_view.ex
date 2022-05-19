@@ -18,6 +18,11 @@ defmodule BlockScoutWeb.API.RPC.TokenView do
     RPCView.render("show.json", data: data)
   end
 
+  def render("tokenlist.json", %{tokens: tokens}) do
+    data = Enum.map(tokens, &prepare_token/1)
+    RPCView.render("show.json", data: data)
+  end
+
   def render("error.json", assigns) do
     RPCView.render("error.json", assigns)
   end

@@ -79,6 +79,11 @@ defmodule BlockScoutWeb.API.RPC.TokenController do
     render(conn, "bridgedtokenlist.json", %{bridged_tokens: bridged_tokens})
   end
 
+  def tokenlist(conn, _params) do
+    tokens = Chain.list_top_tokens(nil)
+    render(conn, "tokenlist.json", %{tokens: tokens})
+  end
+
   defp fetch_contractaddress(params) do
     {:contractaddress_param, Map.fetch(params, "contractaddress")}
   end
