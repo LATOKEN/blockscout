@@ -49,7 +49,7 @@ defmodule Explorer.ExchangeRates.Source.CoinGecko do
     la_data = List.first(market_data["LA"])
 
     last_updated = get_last_updated(la_data)
-    current_price = get_current_la_price(la_data)
+    current_price = get_current_usd_price_cmc(la_data)
 
     id = la_data["slug"]
     btc_value = get_btc_value(id, la_data)
@@ -97,7 +97,7 @@ defmodule Explorer.ExchangeRates.Source.CoinGecko do
     end
   end
 
-  defp get_current_la_price(market_data) do
+  defp get_current_usd_price_cmc(market_data) do
     if market_data["quote"] && market_data["quote"]["USD"] do
       to_decimal(market_data["quote"]["USD"]["price"])
     else
@@ -107,9 +107,8 @@ defmodule Explorer.ExchangeRates.Source.CoinGecko do
 
   defp get_btc_value(id, market_data) do
     case get_btc_price() do
-      {:ok, price} ->
-        btc_price = to_decimal(price)
-        current_price = get_current_price(market_data)
+      {:ok, btc_price} ->
+        current_price = get_current_usd_price_cmc(market_data)
 
         if id != "btc" && current_price && btc_price do
           Decimal.div(current_price, btc_price)
@@ -207,19 +206,15 @@ defmodule Explorer.ExchangeRates.Source.CoinGecko do
     end
   end
 
-  defp get_btc_price(currency \\ "usd") do
-    url = "#{base_url()}/exchange_rates"
-
+  defp get_btc_price() do
+    #url = "#{base_url()}/exchange_rates"
+    url = "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?symbol=BTC"
     case Source.http_request(url) do
-      {:ok, data} = resp ->
-        if is_map(data) do
-          current_price = data["rates"][currency]["value"]
-
-          {:ok, current_price}
-        else
-          resp
-        end
-
+      {:ok, data} ->
+        market_data = data["data"]
+        btc_data = List.first(market_data["BTC"])
+        current_price = get_current_usd_price_cmc(btc_data)
+        {:ok, current_price}
       resp ->
         resp
     end

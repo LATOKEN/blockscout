@@ -67,7 +67,8 @@ defmodule Explorer.ExchangeRates.Source do
     # [{"Content-Type", "application/json"}]
     [
       {"Content-Type", "application/json"},
-      {"X-CMC_PRO_API_KEY", "8365e154-5a44-49ae-847f-6cd1c93cb8e7"}
+      # {"X-CMC_PRO_API_KEY", "8365e154-5a44-49ae-847f-6cd1c93cb8e7"}
+      {"X-CMC_PRO_API_KEY", "33b186b6-53a4-4d91-9fe1-40c9149da8fb"}
     ]
   end
 
