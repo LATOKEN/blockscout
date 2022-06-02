@@ -169,20 +169,28 @@ defmodule Explorer.ExchangeRates.Source.CoinGecko do
 
   defp get_btc_price(currency \\ "usd") do
     url = "#{base_url()}/exchange_rates"
-    Logger.info("Trying to get btc value from coin gecko");
-    case Source.http_request(url) do
-      {:ok, data} = resp ->
-        if is_map(data) do
-          current_price = data["rates"][currency]["value"]
+    Logger.info("Trying to get btc value from #{inspect(url)}");
+    price =
+      case Source.http_request(url) do
+        {:ok, data} = resp ->
+          if is_map(data) do
+            current_price = data["rates"][currency]["value"]
 
-          {:ok, current_price}
-        else
+            {:ok, current_price}
+          else
+            resp
+          end
+
+        resp ->
           resp
-        end
+      end
+    Logger.info("Got btc price #{inspect(price)}")
+    price
+  end
 
-      resp ->
-        resp
-    end
+  @impl Source
+  def headers do
+    Source.headers()
   end
 
   @spec config(atom()) :: term

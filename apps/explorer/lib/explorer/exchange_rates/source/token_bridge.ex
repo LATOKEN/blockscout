@@ -54,6 +54,11 @@ defmodule Explorer.ExchangeRates.Source.TokenBridge do
   @impl Source
   def source_url(_), do: :ignore
 
+  @impl Source
+  def headers do
+    Source.headers()
+  end
+
   @spec secondary_source() :: module()
   defp secondary_source do
     config(:secondary_source) || Explorer.ExchangeRates.Source.CoinGecko

@@ -13,13 +13,11 @@ defmodule Explorer.ExchangeRates.Source.EthPlorer do
   @behaviour Source
 
   @impl Source
-  def format_data(%{"market_data" => _} = json_data) do
-    market_data = json_data["market_data"]
-
+  def format_data(market_data) do
     last_updated = get_last_updated(market_data)
     current_price = get_current_price(market_data)
 
-    id = market_data["symbol"]
+    id = market_data["name"]
     btc_value = get_wbtc_value(id, market_data)
 
     price = market_data && market_data["price"]
@@ -46,14 +44,12 @@ defmodule Explorer.ExchangeRates.Source.EthPlorer do
     ]
   end
 
-  @impl Source
-  def format_data(_), do: []
-
   defp get_last_updated(market_data) do
-    last_updated_data = market_data && market_data["lastUpdated"]
+    price = market_data && market_data["price"]
+    last_updated_data = price && price["ts"]
 
     if last_updated_data do
-      {:ok, last_updated, 0} = DateTime.from_iso8601(last_updated_data)
+      {:ok, last_updated} = DateTime.from_unix(last_updated_data)
       last_updated
     else
       nil
@@ -89,6 +85,12 @@ defmodule Explorer.ExchangeRates.Source.EthPlorer do
     "#{base_url()}/getTokenInfo/#{latoken_contract_on_ethereum()}?apiKey=freekey"
   end
 
+  @impl Source
+  def source_url(input) do
+    Logger.error("EthPlorer: Called source_url with input: #{input}. This should not happen")
+    nil
+  end
+
   defp latoken_contract_on_ethereum do
     "0xE50365f5D679CB98a1dd62D6F6e58e59321BcdDf"
   end
@@ -103,15 +105,22 @@ defmodule Explorer.ExchangeRates.Source.EthPlorer do
 
   defp get_wbtc_price() do
     url = "#{base_url()}/getTokenInfo/#{wbtc_contract_on_ethereum()}?apiKey=freekey"
-    Logger.info("Trying to get wbtc price from ethplorer")
-    case Source.http_request(url) do
-      {:ok, data} ->
-        market_data = data["market_data"]
-        current_price = get_current_price(market_data)
-        {:ok, current_price}
-      resp ->
-        resp
-    end
+    Logger.info("Trying to get wbtc price from #{inspect(url)}")
+    price =
+      case Source.http_request(url) do
+        {:ok, data} ->
+          current_price = get_current_price(data)
+          {:ok, current_price}
+        resp ->
+          resp
+      end
+    Logger.info("Got wbtc price #{inspect(price)}")
+    price
+  end
+
+  @impl Source
+  def headers do
+    Source.headers()
   end
 
   @spec config(atom()) :: term
@@ -119,11 +128,4 @@ defmodule Explorer.ExchangeRates.Source.EthPlorer do
     Application.get_env(:explorer, __MODULE__, [])[key]
   end
 
-  defp bridged_token_symbol_to_id_mapping_to_get_price(symbol) do
-    case symbol do
-      "UNI" -> "uniswap"
-      "SURF" -> "surf-finance"
-      _symbol -> nil
-    end
-  end
 end

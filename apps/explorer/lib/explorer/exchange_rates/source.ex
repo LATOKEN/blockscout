@@ -4,19 +4,31 @@ defmodule Explorer.ExchangeRates.Source do
   """
   require Logger
 
-  import EthereumJSONRPC.Utilities, only: [print: 2]
-
   alias Explorer.ExchangeRates.{Source, Token}
   alias HTTPoison.{Error, Response}
 
   @doc """
   Fetches exchange rates for currencies/tokens.
+  Return type: {:ok, [Token.t()]} | {:error, any}
   """
-  @spec fetch_exchange_rates(module) :: {:ok, [Token.t()]} | {:error, any}
-  def fetch_exchange_rates(source \\ exchange_rates_source()) do
+  def fetch_exchange_rates(source) when not is_list(source) do
     source_url = source.source_url()
-    # fetch_exchange_rates_request(source, "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?symbol=LA")
     fetch_exchange_rates_request(source, source_url)
+  end
+
+  def fetch_exchange_rates([]), do: {:error, "No source available"}
+
+  def fetch_exchange_rates([source | remaining_sources]) do
+    with {:ok, rate} <- fetch_exchange_rates(source) do
+      {:ok, rate}
+    else
+      {:error, _} -> fetch_exchange_rates(remaining_sources)
+    end
+  end
+
+  def fetch_exchange_rates() do
+    all_sources = [exchange_rates_source1(), exchange_rates_source2(), exchange_rates_source3()]
+    fetch_exchange_rates(all_sources)
   end
 
   @spec fetch_exchange_rates_for_token(String.t()) :: {:ok, [Token.t()]} | {:error, any}
@@ -36,23 +48,25 @@ defmodule Explorer.ExchangeRates.Source do
   defp fetch_exchange_rates_request(_source, source_url) when is_nil(source_url), do: {:error, "Source URL is nil"}
 
   defp fetch_exchange_rates_request(source, source_url) do
-    Logger.info("Trying to get exchange rate from #{source_url}")
-    case http_request(source_url) do
-      {:ok, result} = resp ->
-        if is_map(result) do
-          print(result, "printing result for exchange rate")
-          result_formatted =
-            result
-            |> source.format_data()
+    Logger.info("Trying to get exchange rate from #{inspect(source_url)}")
+    rate =
+      case http_request(source_url, source.headers()) do
+        {:ok, result} = resp ->
+          if is_map(result) do
+            result_formatted =
+              result
+              |> source.format_data()
 
-          {:ok, result_formatted}
-        else
+            {:ok, result_formatted}
+          else
+            resp
+          end
+
+        resp ->
           resp
-        end
-
-      resp ->
-        resp
-    end
+      end
+    Logger.info("Got exchange rate #{inspect(rate)}")
+    rate
   end
 
   @doc """
@@ -67,13 +81,10 @@ defmodule Explorer.ExchangeRates.Source do
 
   @callback source_url(String.t()) :: String.t() | :ignore
 
+  @callback headers :: [any]
+
   def headers do
     [{"Content-Type", "application/json"}]
-    # [
-    #   {"Content-Type", "application/json"},
-    #   # {"X-CMC_PRO_API_KEY", "8365e154-5a44-49ae-847f-6cd1c93cb8e7"}
-    #   {"X-CMC_PRO_API_KEY", "33b186b6-53a4-4d91-9fe1-40c9149da8fb"}
-    # ]
   end
 
   def decode_json(data) do
@@ -94,9 +105,16 @@ defmodule Explorer.ExchangeRates.Source do
     Decimal.new(value)
   end
 
-  @spec exchange_rates_source() :: module()
-  defp exchange_rates_source do
+  defp exchange_rates_source1 do
     config(:source) || Explorer.ExchangeRates.Source.EthPlorer
+  end
+
+  defp exchange_rates_source2 do
+    config(:source) || Explorer.ExchangeRates.Source.CoinMarketCap
+  end
+
+  defp exchange_rates_source3 do
+    config(:source) || Explorer.ExchangeRates.Source.CoinGecko
   end
 
   @spec config(atom()) :: term
@@ -105,7 +123,11 @@ defmodule Explorer.ExchangeRates.Source do
   end
 
   def http_request(source_url) do
-    case HTTPoison.get(source_url, headers()) do
+    http_request(source_url, headers())
+  end
+
+  def http_request(source_url, input_header) do
+    case HTTPoison.get(source_url, input_header) do
       {:ok, %Response{body: body, status_code: 200}} ->
         parse_http_success_response(body)
 

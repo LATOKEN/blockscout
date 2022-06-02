@@ -47,9 +47,8 @@ defmodule Explorer.ExchangeRates.Source.CoinMarketCap do
   def format_data(_), do: []
 
   defp get_last_updated(market_data) do
-    last_updated_data = market_data && market_data["last_updated"]
-
-    if last_updated_data do
+    if market_data["quote"] && market_data["quote"]["USD"] do
+      last_updated_data = market_data["quote"]["USD"]["last_updated"]
       {:ok, last_updated, 0} = DateTime.from_iso8601(last_updated_data)
       last_updated
     else
@@ -86,22 +85,40 @@ defmodule Explorer.ExchangeRates.Source.CoinMarketCap do
     "#{base_url()}/cryptocurrency/quotes/latest?symbol=LA"
   end
 
+  @impl Source
+  def source_url(input) do
+    Logger.error("CoinMarketCap: Called source_url with input: #{input}. This should not happen")
+    nil
+  end
+
   defp base_url do
     config(:base_url) || "https://pro-api.coinmarketcap.com/v2"
   end
 
   defp get_btc_price() do
     url = "#{base_url()}/cryptocurrency/quotes/latest?symbol=BTC"
-    Logger.info("Trying to get btc value from coinmarketcap")
-    case Source.http_request(url) do
-      {:ok, data} ->
-        market_data = data["data"]
-        btc_data = List.first(market_data["BTC"])
-        current_price = get_current_price(btc_data)
-        {:ok, current_price}
-      resp ->
-        resp
-    end
+    Logger.info("Trying to get btc value from #{inspect(url)}")
+    price =
+      case Source.http_request(url, headers()) do
+        {:ok, data} ->
+          market_data = data["data"]
+          btc_data = List.first(market_data["BTC"])
+          current_price = get_current_price(btc_data)
+          {:ok, current_price}
+        resp ->
+          resp
+      end
+    Logger.info("Got btc price #{inspect(price)}")
+    price
+  end
+
+  @impl Source
+  def headers do
+    [
+      {"Content-Type", "application/json"},
+      # {"X-CMC_PRO_API_KEY", "8365e154-5a44-49ae-847f-6cd1c93cb8e7"}
+      {"X-CMC_PRO_API_KEY", "33b186b6-53a4-4d91-9fe1-40c9149da8fb"}
+    ]
   end
 
   @spec config(atom()) :: term
@@ -109,11 +126,4 @@ defmodule Explorer.ExchangeRates.Source.CoinMarketCap do
     Application.get_env(:explorer, __MODULE__, [])[key]
   end
 
-  defp bridged_token_symbol_to_id_mapping_to_get_price(symbol) do
-    case symbol do
-      "UNI" -> "uniswap"
-      "SURF" -> "surf-finance"
-      _symbol -> nil
-    end
-  end
 end
