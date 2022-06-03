@@ -74,10 +74,11 @@ postgresql:
     accessMode: ReadWriteOnce
     size: 8Gi
     persistentVolumeReclaimPolicy: Delete
-  postgresqlUsername: blockscout
-  postgresqlPassword: blockscout
-  postgresqlDatabase: blockscout
-  postgresqlPostgresPassword: blockscout
+  auth:
+      username: blockscout
+      password: blockscout
+      database: blockscout
+      postgresPassword: blockscout
   postgresqlExtendedConf:
     maxConnections: 1024
   metrics:
