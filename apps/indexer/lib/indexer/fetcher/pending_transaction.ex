@@ -150,6 +150,17 @@ defmodule Indexer.Fetcher.PendingTransaction do
         Logger.error("bad_gateway")
 
         :ok
+
+      {:error, :ehostunreach}
+        Logger.error("no route to host")
+
+        :ok
+
+      error ->
+        Logger.error("Could not fetch pending transactions with error:"
+          <> " #{inspect(error)}. Will retry again.")
+
+        :ok
     end
   end
 
