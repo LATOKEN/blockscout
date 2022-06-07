@@ -9,6 +9,7 @@ defmodule Explorer.Market.History.Source.CryptoCompare do
       config :explorer, coin: "POA"
 
   """
+  require Logger
 
   alias Explorer.Market.History.Source
   alias HTTPoison.Response
@@ -20,6 +21,8 @@ defmodule Explorer.Market.History.Source.CryptoCompare do
   @impl Source
   def fetch_history(previous_days) do
     url = history_url(previous_days)
+    Logger.info("Trying to fetch market history for #{inspect(previous_days)}"
+      <> " days from #{inspect(url)}")
     headers = [{"Content-Type", "application/json"}]
 
     case HTTPoison.get(url, headers) do
