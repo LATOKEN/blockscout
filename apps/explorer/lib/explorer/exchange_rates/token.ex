@@ -32,6 +32,7 @@ defmodule Explorer.ExchangeRates.Token do
 
   @enforce_keys ~w(available_supply total_supply btc_value id last_updated market_cap_usd name symbol usd_value volume_24h_usd)a
   defstruct ~w(available_supply total_supply btc_value id last_updated market_cap_usd name symbol usd_value volume_24h_usd)a
+  @derive {Jason.Encoder}
 
   def null,
     do: %__MODULE__{
