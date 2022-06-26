@@ -5,11 +5,11 @@ defmodule BlockScoutWeb.StakerController do
 
   import BlockScoutWeb.Chain, only: [paging_options: 1, next_page_params: 3, split_list_by_page: 1]
   import Indexer.Transform.Blocks, only: [get_address_from_compressed_pubkey: 1]
-  import EthereumJSONRPC, only: [fetch_validators_public_key: 1, fetch_stake_of_address: 2]
+  import EthereumJSONRPC, only: [fetch_validators_public_key: 1] #, fetch_stake_of_address: 2]
 
   alias BlockScoutWeb.{StakerView, Controller}
   alias Explorer.{Chain, Market}
-  alias Explorer.Chain.Address
+  #alias Explorer.Chain.Address
   alias Explorer.ExchangeRates.Token
   alias Phoenix.View
 
