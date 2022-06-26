@@ -453,6 +453,8 @@ defmodule BlockScoutWeb.AddressView do
     format_wei_value(stake_to_wei(stake), :ether)
   end
 
+  def stake(nil), do: nil
+
   def stake_to_wei(stake) do
 
     multiplier = Decimal.new("1000000000000000000")

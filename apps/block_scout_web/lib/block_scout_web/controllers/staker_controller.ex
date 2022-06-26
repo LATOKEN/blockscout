@@ -90,6 +90,10 @@ defmodule BlockScoutWeb.StakerController do
     with {:ok, %{staking: stake , delegated_stake: delegated_stake} } <- fetch_stake_of_address(address_hash, json_rpc_named_arguments)
     do
       {stake , delegated_stake}
+    else
+      error ->
+        Logger.error("error fetching stake: #{inspect(error)}")
+        {nil, nil}
     end
   end
 
