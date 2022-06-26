@@ -134,5 +134,4 @@ defmodule BlockScoutWeb.StakerController do
     end
   end
 
-
 end
