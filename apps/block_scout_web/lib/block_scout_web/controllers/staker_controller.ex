@@ -83,7 +83,7 @@ defmodule BlockScoutWeb.StakerController do
     )
   end
 
-  def get_stake(address) do
+  def get_stake(_address) do
     {0, 0}
   end
 
