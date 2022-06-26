@@ -449,7 +449,7 @@ defmodule BlockScoutWeb.AddressView do
   end
 
   # stake is in string
-  def stake(stake) do
+  def stake(stake) when stake != nil do
     format_wei_value(stake_to_wei(stake), :ether)
   end
 
