@@ -93,7 +93,7 @@ defmodule BlockScoutWeb.StakerController do
     else
       error ->
         Logger.error("error fetching stake: #{inspect(error)}")
-        {nil, nil}
+        {0, 0}
     end
   end
 
