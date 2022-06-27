@@ -328,6 +328,8 @@ defmodule EthereumJSONRPC.Transaction do
     }
 
   """
+  def to_elixir(nil), do: nil
+
   def to_elixir(transaction) when is_map(transaction) do
     Enum.into(transaction, %{}, &entry_to_elixir/1)
   end
