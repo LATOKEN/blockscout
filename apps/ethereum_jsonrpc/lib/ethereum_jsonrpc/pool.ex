@@ -24,8 +24,20 @@ defmodule EthereumJSONRPC.Pool do
     with {:ok, response_list} <- EthereumJSONRPC.json_rpc(request, json_rpc_named_arguments)
     do
       [response | _] = response_list
-      [transaction | _] = Transactions.to_elixir([response[:result]])
-      block_hash = transaction["blockHash"]
+      transactions = Transactions.to_elixir([response[:result]])
+      transaction =
+        if transactions == [] do
+          nil
+        else
+          [tx | _] = transactions
+          tx
+        end
+      block_hash =
+        if transaction == nil do
+          nil
+        else
+          transaction["blockHash"]
+        end
       if block_hash == nil or block_hash == "0x" do
         [transaction | check_if_pending(tail , id + 1, json_rpc_named_arguments)]
       else
