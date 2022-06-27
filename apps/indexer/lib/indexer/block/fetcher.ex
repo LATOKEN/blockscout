@@ -8,7 +8,7 @@ defmodule Indexer.Block.Fetcher do
   require Logger
 
   import EthereumJSONRPC, only: [quantity_to_integer: 1]
-  import Indexer.Block.UpdateTokensBalance, only: [update_selected_address_balance: 1]
+  #import Indexer.Block.UpdateTokensBalance, only: [update_selected_address_balance: 1]
 
   alias EthereumJSONRPC.{Blocks, FetchedBeneficiaries}
   alias Explorer.Chain
@@ -167,7 +167,7 @@ defmodule Indexer.Block.Fetcher do
            |> BlockReward.reduce_uncle_rewards(),
          address_token_balances_for_token_transfer = AddressTokenBalances.params_set(%{token_transfers_params: token_transfers}),
          address_token_balances = MapSet.union(address_token_balances_for_token_transfer, AddressTokenBalances.update_all_address(%{tokens_params: tokens}, last)),
-         address_token_balances = MapSet.union(address_token_balances, update_selected_address_balance(last)),
+         #address_token_balances = MapSet.union(address_token_balances, update_selected_address_balance(last)),
          {:ok, inserted} <-
            __MODULE__.import(
              state,
@@ -190,7 +190,7 @@ defmodule Indexer.Block.Fetcher do
       update_transactions_cache(inserted[:transactions])
       update_addresses_cache(inserted[:addresses])
       update_uncles_cache(inserted[:block_second_degree_relations])
-      Logger.info("Fake balances updated")
+      #Logger.info("Fake balances updated")
       result
     else
       {step, {:error, reason}} -> {:error, {step, reason}}
