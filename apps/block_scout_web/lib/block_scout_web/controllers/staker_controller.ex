@@ -9,7 +9,7 @@ defmodule BlockScoutWeb.StakerController do
 
   alias BlockScoutWeb.{StakerView, Controller}
   alias Explorer.{Chain, Market}
-  alias Explorer.Chain.Address
+  #alias Explorer.Chain.Address
   alias Explorer.ExchangeRates.Token
   alias Phoenix.View
 
