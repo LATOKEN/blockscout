@@ -5,7 +5,7 @@ defmodule BlockScoutWeb.StakerController do
 
   import BlockScoutWeb.Chain, only: [paging_options: 1, next_page_params: 3, split_list_by_page: 1]
   import Indexer.Transform.Blocks, only: [get_address_from_compressed_pubkey: 1]
-  import EthereumJSONRPC, only: [fetch_validators_public_key: 1, fetch_stake_of_address: 2]
+  import EthereumJSONRPC, only: [fetch_validators_public_key: 1] #, fetch_stake_of_address: 2]
 
   alias BlockScoutWeb.{StakerView, Controller}
   alias Explorer.{Chain, Market}
@@ -83,18 +83,20 @@ defmodule BlockScoutWeb.StakerController do
     )
   end
 
-  def get_stake(address) do
-    address_hash = Address.checksum(address.hash)
-    json_rpc_named_arguments = Application.get_env(:explorer, :json_rpc_named_arguments)
-    with {:ok, %{staking: stake , delegated_stake: delegated_stake} } <- fetch_stake_of_address(address_hash, json_rpc_named_arguments)
-    do
-      {stake , delegated_stake}
-    else
-      error ->
-        Logger.error("error fetching stake: #{inspect(error)}")
-        {0, 0}
-    end
-  end
+  def get_stake(_address), do: {0, 0}
+
+  # def get_stake(address) do
+  #   address_hash = Address.checksum(address.hash)
+  #   json_rpc_named_arguments = Application.get_env(:explorer, :json_rpc_named_arguments)
+  #   with {:ok, %{staking: stake , delegated_stake: delegated_stake} } <- fetch_stake_of_address(address_hash, json_rpc_named_arguments)
+  #   do
+  #     {stake , delegated_stake}
+  #   else
+  #     error ->
+  #       Logger.error("error fetching stake: #{inspect(error)}")
+  #       {0, 0}
+  #   end
+  # end
 
   def get_validators_address do
     json_rpc_named_arguments = Application.get_env(:explorer, :json_rpc_named_arguments)
