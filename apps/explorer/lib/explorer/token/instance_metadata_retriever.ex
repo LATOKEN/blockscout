@@ -212,16 +212,45 @@ defmodule Explorer.Token.InstanceMetadataRetriever do
       uri
     end
 
-    resp = HTTPoison.get!(newUri)
-    if resp.status_code == 200 do
-      {:ok, json} = decode_json(resp.body)
-      if Map.has_key?(json, "image") do
+    case HTTPoison.get(newUri) do
+      {:ok, %Response{body: body, status_code: 200, headers: headers}} ->
+        if Enum.member?(headers, {"Content-Type", "image/png"}) do
+          json = %{"image" => newUri}
+
+          check_type(json)
+        else
+          {:ok, json} = decode_json(body)
+
+          check_type(json)
+        end
+
+      {:ok, %Response{body: body, status_code: 301}} ->
+        {:ok, json} = decode_json(body)
+
         check_type(json)
-      else
-        newJson = Map.put(json, "image", json["url"])
-        check_type(newJson)
-      end
+
+      {:ok, %Response{body: body}} ->
+        {:error, body}
+
+      {:error, %Error{reason: reason}} ->
+        {:error, reason}
+
+      err ->
+        Logger.debug("Unknown error occurred fetching metadata for uri: #{inspect(newUri)}. error: #{inspect(err)}")
+        {:error, err}
+
     end
+
+    # resp = HTTPoison.get!(newUri)
+    # if resp.status_code == 200 do
+    #   {:ok, json} = decode_json(resp.body)
+    #   if Map.has_key?(json, "image") do
+    #     check_type(json)
+    #   else
+    #     newJson = Map.put(json, "image", json["url"])
+    #     check_type(newJson)
+    #   end
+    # end
 
   rescue
     e ->
