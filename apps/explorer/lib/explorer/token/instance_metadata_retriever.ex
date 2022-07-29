@@ -6,7 +6,7 @@ defmodule Explorer.Token.InstanceMetadataRetriever do
   require Logger
 
   alias Explorer.SmartContract.Reader
-  # alias HTTPoison.{Response}
+  alias HTTPoison.{Error, Response}
 
   @token_uri "c87b56dd"
   # @token_uri "4a8a11c7"
