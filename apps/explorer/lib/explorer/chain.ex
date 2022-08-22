@@ -23,6 +23,7 @@ defmodule Explorer.Chain do
     ]
 
   import EthereumJSONRPC, only: [integer_to_quantity: 1, json_rpc: 2, fetch_block_internal_transactions: 2]
+  import EthereumJSONRPC.Utilities, only: [print: 2]
 
   require Logger
 
@@ -98,6 +99,9 @@ defmodule Explorer.Chain do
   @revert_msg_prefix_4 "Reverted "
   # keccak256("Error(string)")
   @revert_error_method_id "08c379a0"
+
+  # revert reason byte offset = 64 bytes
+  @byte_offset 128
 
   @burn_address_hash_str "0x0000000000000000000000000000000000000000"
 
@@ -3727,7 +3731,7 @@ defmodule Explorer.Chain do
   def transaction_to_status(%Transaction{status: :ok}), do: :success
 
   def transaction_to_status(%Transaction{status: :error, error: nil}),
-    do: {:error, :awaiting_internal_transactions}
+    do: {:error, "Reverted"}
 
   def transaction_to_status(%Transaction{status: :error, error: error}) when is_binary(error), do: {:error, error}
 
@@ -3779,14 +3783,18 @@ defmodule Explorer.Chain do
         Wei.hex_format(value)
       )
 
+    response = EthereumJSONRPC.json_rpc(req, json_rpc_named_arguments)
     data =
-      case EthereumJSONRPC.json_rpc(req, json_rpc_named_arguments) do
-        {:error, %{data: data}} ->
+      case response do
+        {:ok, data} ->
           data
 
         _ ->
           ""
       end
+
+    print(response, "got revert reason response")
+    print(data, "got revert reason")
 
     formatted_revert_reason = format_revert_reason_message(data)
 
@@ -3812,6 +3820,15 @@ defmodule Explorer.Chain do
 
       @revert_msg_prefix_4 <> rest ->
         extract_revert_reason_message_wrapper(rest)
+
+      "0x" <> @revert_error_method_id <> msg_with_offset ->
+        [msg] =
+          msg_with_offset
+          |> String.slice(@byte_offset..-1)
+          |> Base.decode16!(case: :mixed)
+          |> TypeDecoder.decode_raw([:string])
+
+        msg
 
       revert_reason_full ->
         revert_reason_full

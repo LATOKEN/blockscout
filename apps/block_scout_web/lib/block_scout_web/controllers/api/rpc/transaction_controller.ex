@@ -2,6 +2,7 @@ defmodule BlockScoutWeb.API.RPC.TransactionController do
   use BlockScoutWeb, :controller
 
   import BlockScoutWeb.Chain, only: [paging_options: 1, next_page_params: 3, split_list_by_page: 1]
+  import EthereumJSONRPC.Utilities, only: [print: 2]
 
   alias Explorer.Chain
   alias Explorer.Chain.Transaction
@@ -9,7 +10,7 @@ defmodule BlockScoutWeb.API.RPC.TransactionController do
   def gettxinfo(conn, params) do
     with {:txhash_param, {:ok, txhash_param}} <- fetch_txhash(params),
          {:format, {:ok, transaction_hash}} <- to_transaction_hash(txhash_param),
-         {:transaction, {:ok, %Transaction{revert_reason: revert_reason, error: error} = transaction}} <-
+         {:transaction, {:ok, %Transaction{revert_reason: revert_reason, status: status} = transaction}} <-
            transaction_from_hash(transaction_hash),
          paging_options <- paging_options(params) do
       from_api = true
@@ -17,8 +18,9 @@ defmodule BlockScoutWeb.API.RPC.TransactionController do
       {logs, next_page} = split_list_by_page(logs)
 
       transaction_updated =
-        if error == "Reverted" do
+        if status == :error do
           if revert_reason == nil do
+            print(nil, "fetching revert reason")
             %Transaction{transaction | revert_reason: Chain.fetch_tx_revert_reason(transaction)}
           else
             transaction
