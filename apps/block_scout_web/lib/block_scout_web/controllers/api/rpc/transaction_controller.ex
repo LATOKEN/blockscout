@@ -2,7 +2,6 @@ defmodule BlockScoutWeb.API.RPC.TransactionController do
   use BlockScoutWeb, :controller
 
   import BlockScoutWeb.Chain, only: [paging_options: 1, next_page_params: 3, split_list_by_page: 1]
-  import EthereumJSONRPC.Utilities, only: [print: 2]
 
   alias Explorer.Chain
   alias Explorer.Chain.Transaction
@@ -20,7 +19,6 @@ defmodule BlockScoutWeb.API.RPC.TransactionController do
       transaction_updated =
         if status == :error do
           if revert_reason == nil do
-            print(nil, "fetching revert reason")
             %Transaction{transaction | revert_reason: Chain.fetch_tx_revert_reason(transaction)}
           else
             transaction

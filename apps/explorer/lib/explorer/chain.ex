@@ -23,7 +23,6 @@ defmodule Explorer.Chain do
     ]
 
   import EthereumJSONRPC, only: [integer_to_quantity: 1, json_rpc: 2, fetch_block_internal_transactions: 2]
-  import EthereumJSONRPC.Utilities, only: [print: 2]
 
   require Logger
 
@@ -3793,9 +3792,6 @@ defmodule Explorer.Chain do
           ""
       end
 
-    print(response, "got revert reason response")
-    print(data, "got revert reason")
-
     formatted_revert_reason = format_revert_reason_message(data)
 
     if byte_size(formatted_revert_reason) > 0 do
@@ -3822,13 +3818,7 @@ defmodule Explorer.Chain do
         extract_revert_reason_message_wrapper(rest)
 
       "0x" <> @revert_error_method_id <> msg_with_offset ->
-        [msg] =
-          msg_with_offset
-          |> String.slice(@byte_offset..-1)
-          |> Base.decode16!(case: :mixed)
-          |> TypeDecoder.decode_raw([:string])
-
-        msg
+        "0x" <> String.slice(msg_with_offset, @byte_offset..-1)
 
       revert_reason_full ->
         revert_reason_full
