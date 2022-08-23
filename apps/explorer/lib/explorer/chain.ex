@@ -99,6 +99,9 @@ defmodule Explorer.Chain do
   # keccak256("Error(string)")
   @revert_error_method_id "08c379a0"
 
+  # revert reason byte offset = 64 bytes
+  @byte_offset 128
+
   @burn_address_hash_str "0x0000000000000000000000000000000000000000"
 
   # seconds
@@ -3727,7 +3730,7 @@ defmodule Explorer.Chain do
   def transaction_to_status(%Transaction{status: :ok}), do: :success
 
   def transaction_to_status(%Transaction{status: :error, error: nil}),
-    do: {:error, :awaiting_internal_transactions}
+    do: {:error, "Reverted"}
 
   def transaction_to_status(%Transaction{status: :error, error: error}) when is_binary(error), do: {:error, error}
 
@@ -3779,9 +3782,10 @@ defmodule Explorer.Chain do
         Wei.hex_format(value)
       )
 
+    response = EthereumJSONRPC.json_rpc(req, json_rpc_named_arguments)
     data =
-      case EthereumJSONRPC.json_rpc(req, json_rpc_named_arguments) do
-        {:error, %{data: data}} ->
+      case response do
+        {:ok, data} ->
           data
 
         _ ->
@@ -3812,6 +3816,9 @@ defmodule Explorer.Chain do
 
       @revert_msg_prefix_4 <> rest ->
         extract_revert_reason_message_wrapper(rest)
+
+      "0x" <> @revert_error_method_id <> msg_with_offset ->
+        "0x" <> String.slice(msg_with_offset, @byte_offset..-1)
 
       revert_reason_full ->
         revert_reason_full
