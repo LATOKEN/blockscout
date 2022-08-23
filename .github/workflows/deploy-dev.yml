@@ -8,14 +8,18 @@ jobs:
     - uses: actions/checkout@v2
     - uses: rlespinasse/github-slug-action@v4
     - name: Rancher Deploy
-      uses: LATOKEN/actions-rancher-update2@v1.0.0
-      env:
-        RANCHER_URL: ${{ secrets.DEV_RANCHER_URL }}
-        RANCHER_CLUSTER_ID: ${{ secrets.DEV_RANCHER_CLUSTER_ID }}
-        RANCHER_PROJECT_ID: ${{ secrets.DEV_RANCHER_PROJECT_ID }}
-        RANCHER_WORKLOAD: ${{ secrets.DEV_RANCHER_WORKLOAD }}
-        RANCHER_BEARER_TOKEN: ${{ secrets.DEV_RANCHER_TOKEN }}
-        UPDATE_IMAGE: ghcr.io/${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_REF_SLUG_URL }}
+      uses: LATOKEN/actions-rancher-update@1.1.6
+      with:
+        rancher_url: ${{ secrets.DEV_RANCHER_URL_API }}
+        rancher_access: ${{ secrets.DEV_RANCHER_ACCESS_KEY}}
+        rancher_key: ${{ secrets.DEV_RANCHER_SECRET_KEY }}
+        project_id: 1a2040
+        stack_name: blockscout
+        service_name: blockscout
+        docker_image: ghcr.io/${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_REF_SLUG_URL }}
+        pull: true
+        retry: 60
+        timeout: 1
     - name: Send release message to slack chat
       id: slack
       uses: slackapi/slack-github-action@v1.18.0
